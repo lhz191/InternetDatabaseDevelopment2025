@@ -4,7 +4,7 @@
  * 
  * @author 组员D
  * @date 2025-12-08
- * @description 评论的增删改查操作
+ * @description 评论的增删改查操作，包含审核、删除等功能
  */
 
 namespace backend\controllers;

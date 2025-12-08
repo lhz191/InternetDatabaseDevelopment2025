@@ -2,9 +2,9 @@
 /**
  * 文章管理控制器 (Controller层)
  * 
- * @author 组员C
+ * @author 刘浩泽 (2212478)
  * @date 2025-12-08
- * @description 文章的增删改查操作
+ * @description 文章的增删改查操作，包含列表、详情、创建、编辑、删除功能
  */
 
 namespace backend\controllers;
@@ -38,17 +38,30 @@ class ArticleController extends Controller
     }
 
     /**
-     * 文章列表
+     * 文章列表（支持关键词搜索）
      * @return string
      */
     public function actionIndex()
     {
-        $searchModel = new PreNewsArticleSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $keyword = Yii::$app->request->get('keyword', '');
+        
+        $query = PreNewsArticle::find()->orderBy(['created_at' => SORT_DESC]);
+        
+        // 关键词搜索
+        if (!empty($keyword)) {
+            $query->andWhere(['like', 'title', $keyword]);
+        }
+        
+        $dataProvider = new \yii\data\ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+        ]);
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'keyword' => $keyword,
         ]);
     }
 

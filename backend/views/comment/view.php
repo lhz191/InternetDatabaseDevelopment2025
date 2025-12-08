@@ -1,14 +1,14 @@
 <?php
 /**
  * 评论详情页 (View层)
- * @author 组员D
+ * @author 组员C
  * @date 2025-12-08
  */
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
-$this->title = '评论详情 #' . $model->id;
+$this->title = '评论 #' . $model->id;
 $this->params['breadcrumbs'][] = ['label' => '评论管理', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -35,21 +35,27 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             [
                 'attribute' => 'aid',
-                'value' => $model->article ? $model->article->title : '文章已删除',
+                'label' => '所属文章',
+                'value' => $model->article ? $model->article->title : '已删除',
             ],
             [
                 'attribute' => 'uid',
-                'value' => $model->user ? $model->user->username : '用户已删除',
+                'label' => '评论用户',
+                'value' => $model->user ? $model->user->username : '匿名',
             ],
             'content:ntext',
             'likes',
+            'parent_id',
             [
                 'attribute' => 'status',
-                'value' => $model->getStatusText(),
+                'value' => function($model) {
+                    $statusText = ['待审核', '已发布', '已删除'];
+                    return $statusText[$model->status] ?? '未知';
+                },
             ],
             'created_at',
+            'updated_at',
         ],
     ]) ?>
 
 </div>
-

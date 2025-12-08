@@ -1,7 +1,7 @@
 <?php
 /**
  * 评论列表页 (View层)
- * @author 组员D
+ * @author 组员C
  * @date 2025-12-08
  */
 
@@ -18,18 +18,19 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
             'id',
             [
                 'attribute' => 'aid',
+                'label' => '文章',
                 'value' => function($model) {
-                    return $model->article ? $model->article->title : '文章已删除';
+                    return $model->article ? $model->article->title : '已删除';
                 },
             ],
             [
                 'attribute' => 'uid',
+                'label' => '用户',
                 'value' => function($model) {
-                    return $model->user ? $model->user->username : '用户已删除';
+                    return $model->user ? $model->user->username : '匿名';
                 },
             ],
             [
@@ -42,20 +43,19 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'status',
                 'value' => function($model) {
-                    return $model->getStatusText();
+                    $statusText = ['待审核', '已发布', '已删除'];
+                    return $statusText[$model->status] ?? '未知';
                 },
             ],
             'created_at',
+
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{view} {approve} {delete}',
                 'buttons' => [
-                    'approve' => function ($url, $model) {
+                    'approve' => function($url, $model) {
                         if ($model->status == 0) {
-                            return Html::a('<span class="glyphicon glyphicon-ok"></span>', 
-                                ['approve', 'id' => $model->id], 
-                                ['title' => '审核通过']
-                            );
+                            return Html::a('通过', ['approve', 'id' => $model->id], ['class' => 'btn btn-xs btn-success']);
                         }
                         return '';
                     },
@@ -65,4 +65,3 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); ?>
 
 </div>
-

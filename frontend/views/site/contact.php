@@ -1,8 +1,10 @@
 <?php
 /**
  * 联系我们页面 (View层)
- * @author 团队
+ * 
+ * @author 刘浩泽 (2212478)
  * @date 2025-12-08
+ * @description 联系我们页面
  */
 
 use yii\helpers\Html;
@@ -11,203 +13,244 @@ $this->title = '联系我们';
 ?>
 
 <style>
-    .contact-hero {
-        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-        border-radius: 20px;
-        padding: 60px 40px;
-        color: white;
+    .contact-header {
+        height: 280px;
+        background: url('https://images.unsplash.com/photo-1423666639041-f56000c27a9a?w=1400') center/cover;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .contact-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.5);
+    }
+    
+    .contact-header-content {
+        position: relative;
+        z-index: 1;
         text-align: center;
-        margin-bottom: 40px;
+        color: white;
+    }
+    
+    .contact-header h1 {
+        font-size: 42px;
+        font-weight: 700;
+        margin-bottom: 12px;
+    }
+    
+    .contact-header p {
+        font-size: 18px;
+        opacity: 0.9;
+    }
+    
+    .contact-container {
+        max-width: 900px;
+        margin: -60px auto 60px;
+        padding: 0 20px;
+        position: relative;
+        z-index: 2;
     }
     
     .contact-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 25px;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+        margin-bottom: 32px;
+    }
+    
+    @media (max-width: 768px) {
+        .contact-grid {
+            grid-template-columns: 1fr;
+        }
     }
     
     .contact-card {
         background: white;
-        border-radius: 16px;
-        padding: 40px 30px;
+        border-radius: 12px;
+        padding: 32px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
         text-align: center;
-        box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-        transition: transform 0.3s;
+        transition: all 0.3s;
     }
     
     .contact-card:hover {
-        transform: translateY(-10px);
+        transform: translateY(-4px);
+        box-shadow: 0 12px 32px rgba(0,0,0,0.15);
     }
     
     .contact-icon {
-        width: 80px;
-        height: 80px;
+        width: 64px;
+        height: 64px;
         border-radius: 50%;
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         display: flex;
         align-items: center;
         justify-content: center;
-        margin: 0 auto 20px;
-        font-size: 32px;
         color: white;
+        font-size: 24px;
+        margin: 0 auto 20px;
     }
     
-    .contact-title {
-        font-size: 20px;
+    .contact-card h3 {
+        font-size: 18px;
         font-weight: 600;
-        color: #333;
-        margin-bottom: 10px;
+        color: #1a1a1a;
+        margin-bottom: 8px;
     }
     
-    .contact-info {
-        color: #666;
+    .contact-card p {
         font-size: 15px;
+        color: #666;
         line-height: 1.6;
     }
     
-    .contact-link {
+    .contact-card a {
         color: #667eea;
         text-decoration: none;
     }
     
-    .contact-link:hover {
+    .contact-card a:hover {
         text-decoration: underline;
     }
     
-    .download-section {
+    .info-card {
         background: white;
-        border-radius: 16px;
-        padding: 40px;
-        margin-top: 40px;
-        box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        border-radius: 12px;
+        padding: 48px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
     }
     
-    .download-section h2 {
-        font-size: 24px;
-        margin-bottom: 25px;
-        color: #202124;
+    .info-section {
+        margin-bottom: 32px;
     }
     
-    .download-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        gap: 15px;
+    .info-section:last-child {
+        margin-bottom: 0;
     }
     
-    .download-item {
+    .info-section h2 {
+        font-size: 22px;
+        font-weight: 600;
+        color: #1a1a1a;
+        margin-bottom: 16px;
         display: flex;
         align-items: center;
-        gap: 12px;
-        padding: 15px 20px;
-        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-        border-radius: 12px;
-        text-decoration: none;
-        color: #333;
-        transition: all 0.3s;
+        gap: 10px;
     }
     
-    .download-item:hover {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    .info-section h2 i {
+        color: #e74c3c;
+    }
+    
+    .info-section p {
+        font-size: 15px;
+        line-height: 1.8;
+        color: #555;
+    }
+    
+    .github-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 14px 28px;
+        background: #1a1a1a;
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-size: 15px;
+        margin-top: 16px;
+        transition: all 0.2s;
+    }
+    
+    .github-link:hover {
+        background: #333;
         color: white;
     }
     
-    .download-item i {
-        font-size: 24px;
+    .map-placeholder {
+        height: 200px;
+        background: #f5f5f5;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #999;
+        margin-top: 20px;
     }
 </style>
 
-<div class="contact-hero">
-    <h1>📧 联系我们</h1>
-    <p>如有任何问题或建议，欢迎与我们联系</p>
-</div>
+<div class="contact-header">
+    <div class="contact-header-content">
+        <h1>联系我们</h1>
+        <p>有任何问题或建议，欢迎与我们联系</p>
+    </div>
+                </div>
 
-<div class="contact-grid">
-    <div class="contact-card">
-        <div class="contact-icon">
-            <i class="fas fa-university"></i>
+<div class="contact-container">
+    <!-- 联系方式卡片 -->
+    <div class="contact-grid">
+        <div class="contact-card">
+            <div class="contact-icon">
+                <i class="fas fa-envelope"></i>
+            </div>
+            <h3>电子邮箱</h3>
+            <p>
+                <a href="mailto:admin@nankai.edu.cn">admin@nankai.edu.cn</a>
+            </p>
         </div>
-        <h3 class="contact-title">学校</h3>
-        <p class="contact-info">
-            南开大学<br>
-            计算机学院 & 网络空间安全学院
-        </p>
-    </div>
-    
-    <div class="contact-card">
-        <div class="contact-icon">
-            <i class="fas fa-book"></i>
+        <div class="contact-card">
+            <div class="contact-icon" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">
+                <i class="fab fa-github"></i>
+            </div>
+            <h3>GitHub</h3>
+            <p>
+                <a href="https://github.com/lhz191/InternetDatabaseDevelopment2025" target="_blank">项目仓库</a>
+            </p>
         </div>
-        <h3 class="contact-title">课程</h3>
-        <p class="contact-info">
-            互联网数据库开发<br>
-            授课教师: 乜鹏
-        </p>
-    </div>
-    
-    <div class="contact-card">
-        <div class="contact-icon">
-            <i class="fas fa-envelope"></i>
+        <div class="contact-card">
+            <div class="contact-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                <i class="fas fa-map-marker-alt"></i>
+            </div>
+            <h3>地址</h3>
+            <p>天津市南开区卫津路94号<br>南开大学</p>
         </div>
-        <h3 class="contact-title">邮箱</h3>
-        <p class="contact-info">
-            作业提交邮箱：<br>
-            <a href="mailto:nkdbis_homework@163.com" class="contact-link">
-                nkdbis_homework@163.com
-            </a>
-        </p>
     </div>
-    
-    <div class="contact-card">
-        <div class="contact-icon">
-            <i class="fab fa-github"></i>
-        </div>
-        <h3 class="contact-title">GitHub</h3>
-        <p class="contact-info">
-            项目开源仓库：<br>
-            <a href="#" class="contact-link">
-                github.com/xxx/news-system
-            </a>
-        </p>
-    </div>
-</div>
 
-<!-- 作业下载区 -->
-<div class="download-section">
-    <h2><i class="fas fa-download"></i> 作业下载</h2>
-    
-    <h4 style="margin: 20px 0 15px; color: #666;">📁 团队作业</h4>
-    <div class="download-grid">
-        <a href="/advanced/data/team/需求文档.pdf" class="download-item">
-            <i class="fas fa-file-pdf"></i>
-            <span>需求文档</span>
-        </a>
-        <a href="/advanced/data/team/设计文档.pdf" class="download-item">
-            <i class="fas fa-file-pdf"></i>
-            <span>设计文档</span>
-        </a>
-        <a href="/advanced/data/team/实现文档.pdf" class="download-item">
-            <i class="fas fa-file-pdf"></i>
-            <span>实现文档</span>
-        </a>
-        <a href="/advanced/data/team/用户手册.pdf" class="download-item">
-            <i class="fas fa-file-pdf"></i>
-            <span>用户手册</span>
-        </a>
-        <a href="/advanced/data/team/部署文档.pdf" class="download-item">
-            <i class="fas fa-file-pdf"></i>
-            <span>部署文档</span>
-        </a>
-        <a href="/advanced/data/team/项目展示.pptx" class="download-item">
-            <i class="fas fa-file-powerpoint"></i>
-            <span>项目展示PPT</span>
-        </a>
-    </div>
-    
-    <h4 style="margin: 30px 0 15px; color: #666;">👤 个人作业</h4>
-    <div class="download-grid">
-        <a href="/advanced/data/personal/" class="download-item">
-            <i class="fas fa-folder"></i>
-            <span>个人作业目录</span>
-        </a>
+    <!-- 详细信息 -->
+    <div class="info-card">
+        <div class="info-section">
+            <h2><i class="fas fa-university"></i> 课程信息</h2>
+            <p>
+                <strong>课程名称：</strong>互联网数据库开发<br>
+                <strong>开课学院：</strong>计算机学院 & 网络空间安全学院<br>
+                <strong>授课教师：</strong>乜鹏<br>
+                <strong>课程网站：</strong><a href="https://dbis.nankai.edu.cn/2019/0417/c12139a128118/page.htm" target="_blank">https://dbis.nankai.edu.cn</a>
+            </p>
+        </div>
+        
+        <div class="info-section">
+            <h2><i class="fas fa-code-branch"></i> 开源仓库</h2>
+            <p>
+                本项目代码已开源至 GitHub，欢迎 Star 和 Fork！
+            </p>
+            <a href="https://github.com/lhz191/InternetDatabaseDevelopment2025" target="_blank" class="github-link">
+                <i class="fab fa-github"></i> 访问 GitHub 仓库
+            </a>
+        </div>
+        
+        <div class="info-section">
+            <h2><i class="fas fa-map"></i> 学校位置</h2>
+            <p>南开大学 · 天津市南开区卫津路94号</p>
+            <div class="map-placeholder">
+                <span><i class="fas fa-map-marker-alt"></i> 地图加载中...</span>
+            </div>
+        </div>
     </div>
 </div>
