@@ -117,7 +117,7 @@ advanced/
 |-----|------|-------|------------|------|
 | 组员A | 用户管理 | PreSysUser | UserController | user/* |
 | 组员B | 分类管理 | PreNewsCategory | CategoryController | category/* |
-| 组员C | 文章管理 | PreNewsArticle | ArticleController | article/* |
+| 刘浩泽 (2212478) | 首页+文章管理 | PreNewsArticle | ArticleController, SiteController | article/*, site/index,view,news |
 | 组员D | 评论管理 | PreNewsComment | CommentController | comment/* |
 
 ## 📄 作业文档
