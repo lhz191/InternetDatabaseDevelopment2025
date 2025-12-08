@@ -1,14 +1,17 @@
 <?php
 /**
  * 前台站点控制器 (Controller层)
- * @author 团队
+ * 
+ * @author 刘浩泽 (2212478)
  * @date 2025-12-08
+ * @description 前台首页、文章列表、文章详情、点赞等功能
  */
 
 namespace frontend\controllers;
 
 use Yii;
 use yii\web\Controller;
+use yii\web\Response;
 use common\models\PreNewsArticle;
 use common\models\PreNewsCategory;
 use common\models\PreNewsComment;
@@ -16,6 +19,17 @@ use yii\data\ActiveDataProvider;
 
 class SiteController extends Controller
 {
+    /**
+     * 允许AJAX点赞不需要CSRF验证
+     */
+    public function beforeAction($action)
+    {
+        if ($action->id === 'like') {
+            $this->enableCsrfValidation = false;
+        }
+        return parent::beforeAction($action);
+    }
+
     /**
      * 首页
      */
@@ -144,5 +158,36 @@ class SiteController extends Controller
         if ($exception !== null) {
             return $this->render('error', ['exception' => $exception]);
         }
+    }
+    
+    /**
+     * 点赞文章 (AJAX)
+     * @param int $id 文章ID
+     * @return array
+     */
+    public function actionLike($id)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        
+        $article = PreNewsArticle::findOne($id);
+        if (!$article) {
+            return ['success' => false, 'message' => '文章不存在'];
+        }
+        
+        // 检查是否已点赞（使用session存储）
+        $likedArticles = Yii::$app->session->get('liked_articles', []);
+        if (in_array($id, $likedArticles)) {
+            return ['success' => false, 'message' => '您已经点赞过了', 'likes' => $article->likes];
+        }
+        
+        // 增加点赞数
+        $article->likes = $article->likes + 1;
+        $article->save(false);
+        
+        // 记录已点赞
+        $likedArticles[] = $id;
+        Yii::$app->session->set('liked_articles', $likedArticles);
+        
+        return ['success' => true, 'message' => '点赞成功', 'likes' => $article->likes];
     }
 }

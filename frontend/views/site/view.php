@@ -164,6 +164,80 @@ $headerImage = 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1
     .comments-header {
         display: flex;
         justify-content: space-between;
+    }
+    
+    /* 发表评论表单 */
+    .comment-form-wrap {
+        display: flex;
+        gap: 16px;
+        padding: 20px 0;
+        border-bottom: 1px solid #f0f0f0;
+        margin-bottom: 24px;
+    }
+    
+    .comment-form-avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #e74c3c, #c0392b);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 20px;
+        flex-shrink: 0;
+    }
+    
+    .comment-form-box {
+        flex: 1;
+    }
+    
+    .comment-input {
+        width: 100%;
+        padding: 14px 16px;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 15px;
+        resize: none;
+        transition: all 0.2s;
+        font-family: inherit;
+    }
+    
+    .comment-input:focus {
+        outline: none;
+        border-color: #e74c3c;
+        box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+    }
+    
+    .comment-form-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 12px;
+    }
+    
+    .comment-tip {
+        font-size: 13px;
+        color: #999;
+    }
+    
+    .comment-submit-btn {
+        padding: 10px 24px;
+        background: linear-gradient(135deg, #e74c3c, #c0392b);
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 14px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition: all 0.2s;
+    }
+    
+    .comment-submit-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
         align-items: center;
         margin-bottom: 24px;
         padding-bottom: 16px;
@@ -408,6 +482,22 @@ $headerImage = 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1
             </h3>
         </div>
         
+        <!-- 发表评论 -->
+        <div class="comment-form-wrap">
+            <div class="comment-form-avatar">
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="comment-form-box">
+                <textarea class="comment-input" id="commentInput" placeholder="说说你的看法..." rows="3"></textarea>
+                <div class="comment-form-footer">
+                    <span class="comment-tip">请文明发言，理性讨论</span>
+                    <button class="comment-submit-btn" onclick="submitComment()">
+                        <i class="fas fa-paper-plane"></i> 发表评论
+                    </button>
+                </div>
+            </div>
+        </div>
+        
         <?php if (!empty($comments)): ?>
             <?php foreach ($comments as $comment): ?>
                 <div class="comment-item">
@@ -470,3 +560,316 @@ $headerImage = 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1
         </div>
     <?php endif; ?>
 </div>
+
+<!-- 阅读进度条 -->
+<div class="reading-progress" id="readingProgress"></div>
+
+<!-- 侧边工具栏 -->
+<div class="side-tools">
+    <button class="tool-btn like-btn <?= in_array($article->aid, Yii::$app->session->get('liked_articles', [])) ? 'liked' : '' ?>" 
+            onclick="likeArticle(<?= $article->aid ?>)" title="点赞">
+        <i class="fas fa-heart"></i>
+        <span id="likeCount"><?= $article->likes ?></span>
+    </button>
+    <button class="tool-btn" onclick="shareArticle()" title="分享">
+        <i class="fas fa-share-alt"></i>
+    </button>
+    <button class="tool-btn back-top" onclick="scrollToTop()" title="返回顶部">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+</div>
+
+<!-- 分享弹窗 -->
+<div class="share-modal" id="shareModal">
+    <div class="share-content">
+        <h4>分享文章</h4>
+        <div class="share-links">
+            <a href="javascript:void(0)" onclick="shareToWeibo()" class="share-item weibo">
+                <i class="fab fa-weibo"></i> 微博
+            </a>
+            <a href="javascript:void(0)" onclick="copyLink()" class="share-item copy">
+                <i class="fas fa-link"></i> 复制链接
+            </a>
+        </div>
+        <button class="close-modal" onclick="closeShareModal()">关闭</button>
+    </div>
+</div>
+
+<style>
+/* 阅读进度条 */
+.reading-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #e74c3c, #ff6b6b);
+    z-index: 9999;
+    transition: width 0.1s;
+}
+
+/* 侧边工具栏 */
+.side-tools {
+    position: fixed;
+    right: 30px;
+    bottom: 100px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 100;
+}
+
+.tool-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: none;
+    background: white;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    color: #666;
+    transition: all 0.3s;
+}
+
+.tool-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+
+.tool-btn span {
+    font-size: 11px;
+    margin-top: 2px;
+}
+
+.like-btn:hover, .like-btn.liked {
+    color: #e74c3c;
+    background: #fff5f5;
+}
+
+.like-btn.liked i {
+    animation: heartBeat 0.5s;
+}
+
+@keyframes heartBeat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.3); }
+}
+
+.back-top {
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s;
+}
+
+.back-top.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* 分享弹窗 */
+.share-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.5);
+    display: none;
+    z-index: 9999;
+}
+
+.share-modal.show {
+    display: block;
+}
+
+.share-content {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    width: 320px;
+    text-align: center;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10000;
+}
+
+.share-content h4 {
+    margin: 0 0 20px;
+    font-size: 18px;
+    color: #333;
+}
+
+.share-links {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.share-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 13px;
+    transition: all 0.2s;
+}
+
+.share-item.weibo {
+    background: #ff5722;
+    color: white;
+}
+
+.share-item.copy {
+    background: #1890ff;
+    color: white;
+}
+
+.share-item i {
+    font-size: 24px;
+}
+
+.share-item:hover {
+    transform: scale(1.05);
+}
+
+.close-modal {
+    padding: 10px 30px;
+    border: 1px solid #ddd;
+    background: white;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.close-modal:hover {
+    background: #f5f5f5;
+}
+
+@media (max-width: 768px) {
+    .side-tools {
+        right: 15px;
+        bottom: 80px;
+    }
+    
+    .tool-btn {
+        width: 44px;
+        height: 44px;
+        font-size: 16px;
+    }
+}
+</style>
+
+<script>
+// 阅读进度条
+window.addEventListener('scroll', function() {
+    var scrollTop = window.scrollY;
+    var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    var progress = (scrollTop / docHeight) * 100;
+    document.getElementById('readingProgress').style.width = progress + '%';
+    
+    // 返回顶部按钮显示/隐藏
+    var backTopBtn = document.querySelector('.back-top');
+    if (scrollTop > 300) {
+        backTopBtn.classList.add('show');
+    } else {
+        backTopBtn.classList.remove('show');
+    }
+});
+
+// 点赞功能
+function likeArticle(aid) {
+    var btn = document.querySelector('.like-btn');
+    if (btn.classList.contains('liked')) {
+        alert('您已经点赞过了');
+        return;
+    }
+    
+    var url = 'index.php?r=site/like&id=' + aid;
+    
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            btn.classList.add('liked');
+            document.getElementById('likeCount').textContent = data.likes;
+            // 添加动画效果
+            btn.style.transform = 'scale(1.2)';
+            setTimeout(() => { btn.style.transform = 'scale(1)'; }, 200);
+        } else {
+            alert(data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('点赞失败，请稍后重试');
+    });
+}
+
+// 返回顶部
+function scrollToTop() {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+}
+
+// 分享功能
+function shareArticle() {
+    document.getElementById('shareModal').classList.add('show');
+}
+
+function closeShareModal() {
+    document.getElementById('shareModal').classList.remove('show');
+}
+
+function shareToWeibo() {
+    var url = encodeURIComponent(window.location.href);
+    var title = encodeURIComponent(document.title);
+    window.open('https://service.weibo.com/share/share.php?url=' + url + '&title=' + title, '_blank');
+    closeShareModal();
+}
+
+function copyLink() {
+    navigator.clipboard.writeText(window.location.href).then(function() {
+        alert('链接已复制到剪贴板');
+        closeShareModal();
+    });
+}
+
+// 提交评论（UI演示，实际提交由评论模块实现）
+function submitComment() {
+    var content = document.getElementById('commentInput').value.trim();
+    
+    if (!content) {
+        alert('请输入评论内容');
+        return;
+    }
+    
+    if (content.length < 5) {
+        alert('评论内容至少5个字符');
+        return;
+    }
+    
+    // 这里只是UI演示，实际提交逻辑由评论模块的同学实现
+    // TODO: 评论模块同学需要实现 site/comment 或 comment/create action
+    alert('评论功能由评论模块实现，请联系负责评论模块的同学完成后端接口');
+    
+    // 模拟成功效果（实际项目中应该是AJAX提交后刷新评论列表）
+    // document.getElementById('commentInput').value = '';
+}
+</script>
