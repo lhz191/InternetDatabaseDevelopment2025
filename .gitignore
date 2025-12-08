@@ -1,0 +1,36 @@
+# Yii2 生成的文件
+/vendor/
+/node_modules/
+
+# 运行时文件
+backend/runtime/
+frontend/runtime/
+console/runtime/
+
+# 资源文件
+backend/web/assets/
+frontend/web/assets/
+
+# 本地配置
+*-local.php
+
+# 日志文件
+*.log
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# 测试
+/tests/
+codeception.yml
+
+# 调试文件
+*.bak
+*.tmp
