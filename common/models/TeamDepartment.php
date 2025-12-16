@@ -47,4 +47,9 @@ class TeamDepartment extends \yii\db\ActiveRecord
             'sort_order' => '排序',
         ];
     }
+
+    public function getTeamMembers()
+    {
+    return $this->hasMany(TeamMember::className(), ['dept_id' => 'id']);
+    }
 }
