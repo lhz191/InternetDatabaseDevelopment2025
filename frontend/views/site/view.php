@@ -12,14 +12,14 @@ use yii\helpers\Url;
 
 $this->title = $article->title;
 
-// 抗战主题图片
-$headerImage = 'https://images.unsplash.com/photo-1580130544401-f4bd0c41e946?w=1400';
+// 抗战主题 - 使用渐变背景
+$headerGradient = 'linear-gradient(135deg, #8B0000 0%, #4a0000 50%, #2d0000 100%)';
 ?>
 
 <style>
     .article-header {
         height: 360px;
-        background: url('<?= $headerImage ?>') center/cover;
+        background: <?= $headerGradient ?>;
         position: relative;
         display: flex;
         align-items: flex-end;
@@ -792,16 +792,14 @@ function likeArticle(aid) {
         return; // 已点赞直接返回，不弹窗打扰用户
     }
     
-    var url = '<?= Url::to(['site/like']) ?>?id=' + aid;
-    // 获取 CSRF Token
-    var csrfToken = document.querySelector('meta[name="csrf-token"]') ? 
-                    document.querySelector('meta[name="csrf-token"]').getAttribute('content') : '';
+    // 使用绝对路径
+    var baseUrl = window.location.pathname.replace(/\/index\.php.*/, '/index.php');
+    var url = baseUrl + '?r=site/like&id=' + aid;
 
     fetch(url, {
         method: 'POST',
         headers: {
-            'X-Requested-With': 'XMLHttpRequest',
-            'X-CSRF-Token': csrfToken // 添加这一行
+            'X-Requested-With': 'XMLHttpRequest'
         }
     })
     .then(response => response.json())
@@ -812,7 +810,7 @@ function likeArticle(aid) {
             btn.style.transform = 'scale(1.2)';
             setTimeout(() => { btn.style.transform = 'scale(1)'; }, 200);
         } else {
-            alert(data.message);
+            // 已点赞的情况不弹窗
         }
     })
     .catch(error => {

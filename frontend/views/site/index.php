@@ -12,19 +12,21 @@ use yii\helpers\Url;
 
 $this->title = '首页';
 
-// 抗战主题图片
+// 抗战主题图片 - 使用稳定图片源
 $warImages = [
-    'https://images.unsplash.com/photo-1580130544401-f4bd0c41e946?w=600',
-    'https://images.unsplash.com/photo-1569982175971-d92b01cf8694?w=600',
-    'https://images.unsplash.com/photo-1533900298318-6b8da08a523e?w=600',
-    'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=600',
-    'https://images.unsplash.com/photo-1461360370896-922624d12a74?w=600',
-    'https://images.unsplash.com/photo-1516728778615-2d590ea18e1b?w=600',
+    'https://picsum.photos/seed/war1/600/400',
+    'https://picsum.photos/seed/war2/600/400',
+    'https://picsum.photos/seed/war3/600/400',
+    'https://picsum.photos/seed/war4/600/400',
+    'https://picsum.photos/seed/war5/600/400',
+    'https://picsum.photos/seed/war6/600/400',
+    'https://picsum.photos/seed/war7/600/400',
+    'https://picsum.photos/seed/war8/600/400',
 ];
 ?>
 
 <!-- Hero 大图 - 抗战主题 -->
-<div class="hero-banner" style="background: url('https://images.unsplash.com/photo-1580130544401-f4bd0c41e946?w=1400') center/cover;">
+<div class="hero-banner" style="background: linear-gradient(135deg, #8B0000 0%, #4a0000 50%, #2d0000 100%);">
     <div class="hero-content">
         <h1>铭记历史 珍爱和平</h1>
         <p>纪念中国人民抗日战争暨世界反法西斯战争胜利80周年</p>

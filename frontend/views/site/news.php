@@ -11,25 +11,25 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\LinkPager;
 
-$this->title = $currentCategory ? $currentCategory->name : '新闻列表';
+$this->title = $currentCategory ? $currentCategory->name : '历史回顾';
 
-// 新闻图片列表
+// 抗战主题图片列表 - 使用稳定图片源
 $newsImages = [
-    'https://images.unsplash.com/photo-1495020689067-958852a7765e?w=600',
-    'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=600',
-    'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=600',
-    'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=600',
-    'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=600',
-    'https://images.unsplash.com/photo-1518770660439-4636190af475?w=600',
-    'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=600',
-    'https://images.unsplash.com/photo-1432821596592-e2c18b78144f?w=600',
+    'https://picsum.photos/seed/history1/600/400',
+    'https://picsum.photos/seed/history2/600/400',
+    'https://picsum.photos/seed/history3/600/400',
+    'https://picsum.photos/seed/history4/600/400',
+    'https://picsum.photos/seed/history5/600/400',
+    'https://picsum.photos/seed/history6/600/400',
+    'https://picsum.photos/seed/history7/600/400',
+    'https://picsum.photos/seed/history8/600/400',
 ];
 ?>
 
 <style>
     .page-header {
         height: 200px;
-        background: url('https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1400') center/cover;
+        background: linear-gradient(135deg, #8B0000 0%, #4a0000 50%, #2d0000 100%);
         position: relative;
         display: flex;
         align-items: center;
@@ -43,7 +43,8 @@ $newsImages = [
         left: 0;
         right: 0;
         bottom: 0;
-        background: rgba(0,0,0,0.5);
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90" opacity="0.05">★</text></svg>') repeat;
+        background-size: 60px;
     }
     
     .page-header-content {
@@ -170,7 +171,7 @@ $newsImages = [
 <div class="page-header">
     <div class="page-header-content">
         <h1><?= Html::encode($this->title) ?></h1>
-        <p><?= $currentCategory ? Html::encode($currentCategory->description) : '浏览所有新闻资讯' ?></p>
+        <p><?= $currentCategory ? Html::encode($currentCategory->description) : '铭记历史 · 缅怀先烈 · 珍爱和平' ?></p>
     </div>
 </div>
 
