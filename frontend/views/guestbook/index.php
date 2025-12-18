@@ -6,6 +6,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\widgets\LinkPager;
 
 $this->title = '留言互动';
 ?>
@@ -263,6 +264,19 @@ $this->title = '留言互动';
                             <p>还没有人留言，快来抢沙发吧！</p>
                         </div>
                     <?php endif; ?>
+
+                    <div class="pagination-container" style="margin-top: 30px; text-align: center;">
+                        <?= LinkPager::widget([
+                            'pagination' => $pages,
+                            'options' => ['class' => 'pagination justify-content-center'],
+                            'linkOptions' => ['class' => 'page-link'],
+                            'pageCssClass' => 'page-item',
+                            'disabledPageCssClass' => 'disabled page-item',
+                            'prevPageCssClass' => 'page-item',
+                            'nextPageCssClass' => 'page-item',
+                            'activePageCssClass' => 'active',
+                        ]) ?>
+                    </div>
                 </div>
             </div>
         </div>

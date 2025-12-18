@@ -511,11 +511,11 @@ AppAsset::register($this);
             <i class="fas fa-star"></i> 抗战胜利80周年
         </a>
         <ul class="nav-links">
-            <li><a href="<?= Url::to(['/site/index']) ?>" class="<?= Yii::$app->controller->action->id == 'index' ? 'active' : '' ?>">首页</a></li>
-            <li><a href="<?= Url::to(['/site/news']) ?>" class="<?= Yii::$app->controller->action->id == 'news' ? 'active' : '' ?>">历史回顾</a></li>
-            <li><a href="<?= Url::to(['/team/index']) ?>">团队展示</a></li>
-            <li><a href="<?= Url::to(['/guestbook/index']) ?>">留言板</a></li>
-            <li><a href="<?= Url::to(['/site/about']) ?>" class="<?= Yii::$app->controller->action->id == 'about' ? 'active' : '' ?>">关于我们</a></li>
+            <li><a href="<?= Url::to(['/site/index']) ?>" class="<?= Yii::$app->controller->route == 'site/index' ? 'active' : '' ?>">首页</a></li>
+            <li><a href="<?= Url::to(['/site/news']) ?>" class="<?= Yii::$app->controller->route == 'site/news' ? 'active' : '' ?>">历史回顾</a></li>
+            <li><a href="<?= Url::to(['/team/index']) ?>" class="<?= Yii::$app->controller->id == 'team' ? 'active' : '' ?>">团队展示</a></li>
+            <li><a href="<?= Url::to(['/guestbook/index']) ?>" class="<?= Yii::$app->controller->id == 'guestbook' ? 'active' : '' ?>">留言板</a></li>
+            <li><a href="<?= Url::to(['/site/about']) ?>" class="<?= Yii::$app->controller->route == 'site/about' ? 'active' : '' ?>">关于我们</a></li>
             
             <?php if (Yii::$app->user->isGuest): ?>
                 <li><a href="<?= Url::to(['/site/login']) ?>">登录/注册</a></li>
