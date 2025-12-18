@@ -505,6 +505,7 @@ try {
                     <li><a href="<?= Url::to(['/site/index']) ?>">首页</a></li>
                     <li><a href="<?= Url::to(['/site/news']) ?>">新闻列表</a></li>
                     <li><a href="<?= Url::to(['/team/index']) ?>">团队介绍</a></li>
+                    <li><a href="<?= Url::to(['/site/about']) ?>">关于</a></li>
                 </ul>
             </div>
             
