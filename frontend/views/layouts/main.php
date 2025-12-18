@@ -1,7 +1,8 @@
 <?php
 /**
  * 前台主布局文件 (View层)
- * * @author 刘浩泽 (2212478)
+ * 
+ * @author 刘浩泽 (2212478)
  * @date 2025-12-08
  * @description 前台网站主布局，包含导航、页脚等公共部分
  */
@@ -10,36 +11,7 @@ use frontend\assets\AppAsset;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
-// --- 【新增 1】 引入模型类 
-use common\models\Link;
-use common\models\Tag;
-use common\models\VisitLog;
-
 AppAsset::register($this);
-
-// --- 【新增 2】 自动记录访问日志 ---
-try {
-    $log = new VisitLog();
-    $log->page_url = Yii::$app->request->absoluteUrl;
-    $log->ip_address = Yii::$app->request->userIP;
-    $log->user_agent = Yii::$app->request->userAgent;
-    // visit_time 数据库通常有默认值 CURRENT_TIMESTAMP
-    $log->save();
-} catch (\Exception $e) {
-    // 忽略日志错误，不影响页面显示
-}
-
-// --- 【新增 3】 获取标签和链接数据 ---
-$hotTags = [];
-$friendLinks = [];
-try {
-    // 获取前10个热门标签
-    $hotTags = Tag::find()->orderBy(['frequency' => SORT_DESC])->limit(10)->all();
-    // 获取所有友情链接
-    $friendLinks = Link::find()->orderBy(['sort_order' => SORT_ASC])->all();
-} catch (\Exception $e) {
-    // 忽略数据库错误（防止表还没建好时报错）
-}
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -49,12 +21,11 @@ try {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?php $this->registerCsrfMetaTags() ?>
-    <title><?= Html::encode($this->title) ?> - 新闻资讯网</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <title><?= Html::encode($this->title) ?> - 抗战胜利80周年纪念</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=Noto+Serif+SC:wght@600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <?php $this->head() ?>
     <style>
-        /* ================== 原有 CSS 样式 (保持不变) ================== */
         * {
             margin: 0;
             padding: 0;
@@ -63,15 +34,15 @@ try {
         
         body {
             font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: #f5f5f5;
+            background: #f8f6f3;
             min-height: 100vh;
             color: #333;
         }
         
-        /* 顶部导航 */
+        /* 顶部导航 - 军旅风格 */
         .navbar {
-            background: white;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            background: linear-gradient(135deg, #8B0000 0%, #6B0000 100%);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
             position: fixed;
             width: 100%;
             top: 0;
@@ -85,21 +56,24 @@ try {
             justify-content: space-between;
             align-items: center;
             padding: 0 20px;
-            height: 60px;
+            height: 65px;
         }
         
         .logo {
-            font-size: 22px;
+            font-family: 'Noto Serif SC', serif;
+            font-size: 24px;
             font-weight: 700;
-            color: #1a1a1a;
+            color: #FFD700;
             text-decoration: none;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
         }
         
         .logo i {
-            color: #e74c3c;
+            color: #FFD700;
+            font-size: 28px;
         }
         
         .nav-links {
@@ -110,33 +84,34 @@ try {
         
         .nav-links a {
             text-decoration: none;
-            color: #666;
+            color: rgba(255,255,255,0.9);
             font-size: 15px;
-            padding: 8px 16px;
+            padding: 10px 18px;
             border-radius: 6px;
             transition: all 0.2s;
         }
         
         .nav-links a:hover {
-            background: #f5f5f5;
-            color: #1a1a1a;
+            background: rgba(255,255,255,0.15);
+            color: #FFD700;
         }
         
         .nav-links a.active {
-            background: #1a1a1a;
-            color: white;
+            background: rgba(255,215,0,0.2);
+            color: #FFD700;
+            border: 1px solid rgba(255,215,0,0.3);
         }
         
         /* 主内容区 */
         .main-content {
-            margin-top: 60px;
+            margin-top: 65px;
             min-height: calc(100vh - 200px);
         }
         
-        /* Hero 大图区域 */
+        /* Hero 大图区域 - 抗战风格 */
         .hero-banner {
-            height: 400px;
-            background: url('https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1400') center/cover;
+            height: 450px;
+            background: url('https://images.unsplash.com/photo-1580130544401-f4bd0c41e946?w=1400') center/cover;
             position: relative;
             display: flex;
             align-items: center;
@@ -150,7 +125,7 @@ try {
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.6));
+            background: linear-gradient(to bottom, rgba(139,0,0,0.7), rgba(0,0,0,0.8));
         }
         
         .hero-content {
@@ -162,17 +137,30 @@ try {
         }
         
         .hero-content h1 {
-            font-size: 48px;
+            font-family: 'Noto Serif SC', serif;
+            font-size: 52px;
             font-weight: 700;
-            margin-bottom: 16px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            color: #FFD700;
         }
         
         .hero-content p {
-            font-size: 20px;
+            font-size: 22px;
             opacity: 0.95;
-            max-width: 600px;
+            max-width: 700px;
             margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        .hero-year {
+            font-size: 120px;
+            font-weight: 700;
+            color: rgba(255,215,0,0.15);
+            position: absolute;
+            bottom: 20px;
+            right: 50px;
+            font-family: 'Noto Serif SC', serif;
         }
         
         /* 内容容器 */
@@ -191,33 +179,35 @@ try {
         }
         
         .section-title {
-            font-size: 24px;
+            font-family: 'Noto Serif SC', serif;
+            font-size: 26px;
             font-weight: 600;
-            color: #1a1a1a;
+            color: #8B0000;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
         
         .section-title::before {
             content: '';
-            width: 4px;
-            height: 24px;
-            background: #e74c3c;
+            width: 5px;
+            height: 28px;
+            background: linear-gradient(to bottom, #FFD700, #B8860B);
             border-radius: 2px;
         }
         
         .view-all {
-            color: #666;
+            color: #8B0000;
             text-decoration: none;
             font-size: 14px;
             display: flex;
             align-items: center;
             gap: 4px;
+            font-weight: 500;
         }
         
         .view-all:hover {
-            color: #e74c3c;
+            color: #B8860B;
         }
         
         /* 新闻卡片网格 */
@@ -243,14 +233,15 @@ try {
             background: white;
             border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            box-shadow: 0 2px 12px rgba(139,0,0,0.08);
             transition: all 0.3s;
             cursor: pointer;
+            border: 1px solid rgba(139,0,0,0.05);
         }
         
         .news-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+            transform: translateY(-6px);
+            box-shadow: 0 15px 30px rgba(139,0,0,0.15);
         }
         
         .news-card-image {
@@ -264,12 +255,13 @@ try {
             position: absolute;
             top: 12px;
             left: 12px;
-            padding: 4px 12px;
-            background: #e74c3c;
-            color: white;
+            padding: 5px 14px;
+            background: linear-gradient(135deg, #8B0000, #6B0000);
+            color: #FFD700;
             border-radius: 4px;
             font-size: 12px;
-            font-weight: 500;
+            font-weight: 600;
+            letter-spacing: 1px;
         }
         
         .news-card-body {
@@ -277,11 +269,12 @@ try {
         }
         
         .news-card-title {
+            font-family: 'Noto Serif SC', serif;
             font-size: 18px;
             font-weight: 600;
             color: #1a1a1a;
             margin-bottom: 10px;
-            line-height: 1.4;
+            line-height: 1.5;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
@@ -291,7 +284,7 @@ try {
         .news-card-summary {
             color: #666;
             font-size: 14px;
-            line-height: 1.6;
+            line-height: 1.7;
             margin-bottom: 16px;
             display: -webkit-box;
             -webkit-line-clamp: 2;
@@ -314,15 +307,15 @@ try {
         }
         
         .author-avatar {
-            width: 24px;
-            height: 24px;
+            width: 26px;
+            height: 26px;
             border-radius: 50%;
-            background: #eee;
+            background: linear-gradient(135deg, #8B0000, #B8860B);
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 12px;
-            color: #666;
+            color: white;
         }
         
         .news-card-stats {
@@ -342,7 +335,8 @@ try {
             border-radius: 12px;
             padding: 24px;
             margin-bottom: 32px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            box-shadow: 0 2px 12px rgba(139,0,0,0.08);
+            border: 1px solid rgba(139,0,0,0.05);
         }
         
         .category-tags {
@@ -352,26 +346,29 @@ try {
         }
         
         .category-tag {
-            padding: 8px 20px;
-            background: #f5f5f5;
+            padding: 10px 22px;
+            background: #f8f6f3;
             border-radius: 20px;
             font-size: 14px;
             color: #666;
             text-decoration: none;
             transition: all 0.2s;
+            border: 1px solid transparent;
         }
         
         .category-tag:hover, .category-tag.active {
-            background: #1a1a1a;
-            color: white;
+            background: linear-gradient(135deg, #8B0000, #6B0000);
+            color: #FFD700;
+            border-color: #8B0000;
         }
         
-        /* 页脚 */
+        /* 页脚 - 庄重风格 */
         .footer {
-            background: #1a1a1a;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d1f1f 100%);
             color: white;
-            padding: 48px 20px 24px;
+            padding: 50px 20px 24px;
             margin-top: 60px;
+            border-top: 4px solid #8B0000;
         }
         
         .footer-content {
@@ -393,27 +390,30 @@ try {
         }
         
         .footer-brand h3 {
-            font-size: 24px;
+            font-family: 'Noto Serif SC', serif;
+            font-size: 26px;
             margin-bottom: 16px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            color: #FFD700;
         }
         
         .footer-brand h3 i {
-            color: #e74c3c;
+            color: #FFD700;
         }
         
         .footer-brand p {
-            color: #999;
-            line-height: 1.8;
+            color: #aaa;
+            line-height: 1.9;
             font-size: 14px;
         }
         
         .footer-column h4 {
             font-size: 16px;
             margin-bottom: 20px;
-            color: white;
+            color: #FFD700;
+            font-weight: 600;
         }
         
         .footer-column ul {
@@ -425,123 +425,95 @@ try {
         }
         
         .footer-column a {
-            color: #999;
+            color: #aaa;
             text-decoration: none;
             font-size: 14px;
             transition: color 0.2s;
         }
         
         .footer-column a:hover {
-            color: white;
+            color: #FFD700;
         }
         
         .footer-bottom {
             padding-top: 24px;
-            border-top: 1px solid #333;
+            border-top: 1px solid #444;
             text-align: center;
-            color: #666;
+            color: #888;
             font-size: 14px;
+        }
+        
+        .footer-bottom span {
+            color: #FFD700;
         }
         
         /* 响应式 */
         @media (max-width: 768px) {
-            .hero-content h1 { font-size: 32px; }
+            .hero-content h1 { font-size: 36px; }
             .nav-links { display: none; }
-            .hero-banner { height: 300px; }
+            .hero-banner { height: 350px; }
+            .hero-year { display: none; }
         }
-
-        /* --- 【新增 4】 仅追加了标签云的样式，不影响其他布局 --- */
-        .tag-cloud { display: flex; flex-wrap: wrap; gap: 8px; }
-        .footer-tag { 
-            background: #333; 
-            color: #ccc; 
-            padding: 4px 10px; 
-            border-radius: 4px; 
-            font-size: 12px; 
-            text-decoration: none; 
-            transition: 0.2s; 
-            display: inline-block;
-        }
-        .footer-tag:hover { background: #e74c3c; color: white; }
     </style>
 </head>
 <body>
 <?php $this->beginBody() ?>
 
+<!-- 导航栏 -->
 <nav class="navbar">
     <div class="navbar-container">
         <a href="<?= Url::to(['/site/index']) ?>" class="logo">
-            <i class="fas fa-newspaper"></i> 新闻资讯
+            <i class="fas fa-star"></i> 抗战胜利80周年
         </a>
         <ul class="nav-links">
-            <li><a href="<?= Url::to(['/site/index']) ?>" class="<?= Yii::$app->controller->id == 'site' && Yii::$app->controller->action->id == 'index' ? 'active' : '' ?>">首页</a></li>
-            <li><a href="<?= Url::to(['/site/news']) ?>" class="<?= Yii::$app->controller->action->id == 'news' ? 'active' : '' ?>">新闻</a></li>
-            <li><a href="<?= Url::to(['/team/index']) ?>" class="<?= Yii::$app->controller->id == 'team' ? 'active' : '' ?>">团队介绍</a></li>
-            <li><a href="<?= Url::to(['/guestbook/index']) ?>" class="<?= Yii::$app->controller->id == 'guestbook' ? 'active' : '' ?>">留言板</a></li>
-            <li><a href="<?= Url::to(['/site/about']) ?>" class="<?= Yii::$app->controller->action->id == 'about' ? 'active' : '' ?>">关于</a></li>
-            <li><a href="<?= Url::to(['/site/contact']) ?>" class="<?= Yii::$app->controller->action->id == 'contact' ? 'active' : '' ?>">联系</a></li>
+            <li><a href="<?= Url::to(['/site/index']) ?>" class="<?= Yii::$app->controller->action->id == 'index' ? 'active' : '' ?>">首页</a></li>
+            <li><a href="<?= Url::to(['/site/news']) ?>" class="<?= Yii::$app->controller->action->id == 'news' ? 'active' : '' ?>">历史回顾</a></li>
+            <li><a href="<?= Url::to(['/team/index']) ?>">团队展示</a></li>
+            <li><a href="<?= Url::to(['/guestbook/index']) ?>">留言板</a></li>
+            <li><a href="<?= Url::to(['/site/about']) ?>" class="<?= Yii::$app->controller->action->id == 'about' ? 'active' : '' ?>">关于我们</a></li>
         </ul>
     </div>
 </nav>
 
+<!-- 主要内容 -->
 <main class="main-content">
     <?= $content ?>
 </main>
 
+<!-- 页脚 -->
 <footer class="footer">
     <div class="footer-content">
         <div class="footer-grid">
             <div class="footer-brand">
-                <h3><i class="fas fa-newspaper"></i> 新闻资讯</h3>
-                <p>南开大学互联网数据库课程设计项目<br>基于 Yii2 框架开发的新闻资讯管理系统</p>
-                <p style="font-size: 12px; color: #666; margin-top: 10px;">
-                    <i class="fas fa-eye"></i> 今日访问IP: <?= Html::encode(Yii::$app->request->userIP) ?>
-                </p>
+                <h3><i class="fas fa-star"></i> 铭记历史</h3>
+                <p>纪念中国人民抗日战争暨世界反法西斯战争胜利80周年<br>南开大学互联网数据库课程设计项目</p>
             </div>
-            
             <div class="footer-column">
                 <h4>快速导航</h4>
                 <ul>
                     <li><a href="<?= Url::to(['/site/index']) ?>">首页</a></li>
-                    <li><a href="<?= Url::to(['/site/news']) ?>">新闻列表</a></li>
-                    <li><a href="<?= Url::to(['/team/index']) ?>">团队介绍</a></li>
-                    <li><a href="<?= Url::to(['/site/about']) ?>">关于</a></li>
+                    <li><a href="<?= Url::to(['/site/news']) ?>">历史回顾</a></li>
+                    <li><a href="<?= Url::to(['/site/about']) ?>">关于我们</a></li>
                 </ul>
             </div>
-            
             <div class="footer-column">
-                <h4>热门标签</h4>
-                <?php if (!empty($hotTags)): ?>
-                    <div class="tag-cloud">
-                        <?php foreach ($hotTags as $tag): ?>
-                            <a href="<?= Url::to(['/site/news', 'tag' => $tag->name]) ?>" class="footer-tag">#<?= Html::encode($tag->name) ?></a>
-                        <?php endforeach; ?>
-                    </div>
-                <?php else: ?>
-                    <p style="color: #666; font-size: 13px;">暂无标签</p>
-                <?php endif; ?>
-            </div>
-            
-            <div class="footer-column">
-                <h4>友情链接</h4>
+                <h4>专题分类</h4>
                 <ul>
-                    <?php if (!empty($friendLinks)): ?>
-                        <?php foreach ($friendLinks as $link): ?>
-                            <li>
-                                <a href="<?= Html::encode($link->url) ?>" target="_blank">
-                                    <i class="fas fa-link"></i> <?= Html::encode($link->name) ?>
-                                </a>
-                            </li>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <li><a href="#">南开大学</a></li>
-                        <li><a href="#">计算机学院</a></li>
-                    <?php endif; ?>
+                    <li><a href="#">重大战役</a></li>
+                    <li><a href="#">英雄人物</a></li>
+                    <li><a href="#">历史遗址</a></li>
                 </ul>
-            </div>           
+            </div>
+            <div class="footer-column">
+                <h4>联系方式</h4>
+                <ul>
+                    <li><a href="#"><i class="fas fa-envelope"></i> nankai@edu.cn</a></li>
+                    <li><a href="#"><i class="fab fa-github"></i> GitHub</a></li>
+                </ul>
+            </div>
         </div>
         <div class="footer-bottom">
-            © 2025 新闻资讯管理系统 · 南开大学 · Powered by Yii2
+            © 2025 <span>抗战胜利80周年纪念网</span> · 南开大学 · 铭记历史，珍爱和平
         </div>
     </div>
 </footer>

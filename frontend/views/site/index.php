@@ -12,30 +12,40 @@ use yii\helpers\Url;
 
 $this->title = '首页';
 
-// 新闻图片列表
-$newsImages = [
-    'https://images.unsplash.com/photo-1495020689067-958852a7765e?w=600',
-    'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=600',
-    'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=600',
-    'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=600',
-    'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=600',
-    'https://images.unsplash.com/photo-1518770660439-4636190af475?w=600',
+// 抗战主题图片
+$warImages = [
+    'https://images.unsplash.com/photo-1580130544401-f4bd0c41e946?w=600',
+    'https://images.unsplash.com/photo-1569982175971-d92b01cf8694?w=600',
+    'https://images.unsplash.com/photo-1533900298318-6b8da08a523e?w=600',
+    'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=600',
+    'https://images.unsplash.com/photo-1461360370896-922624d12a74?w=600',
+    'https://images.unsplash.com/photo-1516728778615-2d590ea18e1b?w=600',
 ];
 ?>
 
-<!-- Hero 大图 -->
-<div class="hero-banner">
+<!-- Hero 大图 - 抗战主题 -->
+<div class="hero-banner" style="background: url('https://images.unsplash.com/photo-1580130544401-f4bd0c41e946?w=1400') center/cover;">
     <div class="hero-content">
-        <h1>新闻资讯</h1>
-        <p>获取最新、最热的新闻资讯，了解世界动态</p>
+        <h1>铭记历史 珍爱和平</h1>
+        <p>纪念中国人民抗日战争暨世界反法西斯战争胜利80周年</p>
     </div>
+    <div class="hero-year">1945-2025</div>
 </div>
 
 <div class="container">
+    <!-- 纪念标语 -->
+    <div style="text-align: center; padding: 30px 0; margin-bottom: 20px;">
+        <p style="font-size: 18px; color: #8B0000; font-weight: 500; letter-spacing: 2px;">
+            <i class="fas fa-star" style="color: #FFD700;"></i>
+            勿忘国耻 · 振兴中华 · 缅怀先烈 · 开创未来
+            <i class="fas fa-star" style="color: #FFD700;"></i>
+        </p>
+    </div>
+
     <!-- 分类导航 -->
     <div class="category-section">
         <div class="category-tags">
-            <a href="<?= Url::to(['/site/news']) ?>" class="category-tag active">全部</a>
+            <a href="<?= Url::to(['/site/news']) ?>" class="category-tag active">全部专题</a>
             <?php foreach ($categories as $category): ?>
                 <a href="<?= Url::to(['/site/news', 'cid' => $category->cid]) ?>" class="category-tag">
                     <?= Html::encode($category->name) ?>
@@ -44,9 +54,9 @@ $newsImages = [
         </div>
     </div>
     
-    <!-- 热门新闻 -->
+    <!-- 热门文章 -->
     <div class="section-header">
-        <h2 class="section-title">热门新闻</h2>
+        <h2 class="section-title">热门专题</h2>
         <a href="<?= Url::to(['/site/news']) ?>" class="view-all">
             查看全部 <i class="fas fa-arrow-right"></i>
         </a>
@@ -55,9 +65,9 @@ $newsImages = [
     <div class="news-grid">
         <?php foreach ($hotArticles as $index => $article): ?>
             <div class="news-card" onclick="location.href='<?= Url::to(['/site/view', 'id' => $article->aid]) ?>'">
-                <div class="news-card-image" style="background-image: url('<?= $newsImages[$index % count($newsImages)] ?>')">
+                <div class="news-card-image" style="background-image: url('<?= $warImages[$index % count($warImages)] ?>')">
                     <span class="news-card-category">
-                        <?= $article->category ? Html::encode($article->category->name) : '资讯' ?>
+                        <?= $article->category ? Html::encode($article->category->name) : '历史' ?>
                     </span>
                 </div>
                 <div class="news-card-body">
@@ -80,7 +90,7 @@ $newsImages = [
         <?php endforeach; ?>
     </div>
     
-    <!-- 最新新闻 -->
+    <!-- 最新发布 -->
     <div class="section-header" style="margin-top: 60px;">
         <h2 class="section-title">最新发布</h2>
         <a href="<?= Url::to(['/site/news']) ?>" class="view-all">
@@ -91,9 +101,9 @@ $newsImages = [
     <div class="news-grid">
         <?php foreach ($latestArticles as $index => $article): ?>
             <div class="news-card" onclick="location.href='<?= Url::to(['/site/view', 'id' => $article->aid]) ?>'">
-                <div class="news-card-image" style="background-image: url('<?= $newsImages[($index + 3) % count($newsImages)] ?>')">
+                <div class="news-card-image" style="background-image: url('<?= $warImages[($index + 3) % count($warImages)] ?>')">
                     <span class="news-card-category">
-                        <?= $article->category ? Html::encode($article->category->name) : '资讯' ?>
+                        <?= $article->category ? Html::encode($article->category->name) : '历史' ?>
                     </span>
                 </div>
                 <div class="news-card-body">

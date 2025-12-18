@@ -14,8 +14,8 @@ $this->title = '关于我们';
 
 <style>
     .about-header {
-        height: 280px;
-        background: url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1400') center/cover;
+        height: 320px;
+        background: url('https://images.unsplash.com/photo-1580130544401-f4bd0c41e946?w=1400') center/cover;
         position: relative;
         display: flex;
         align-items: center;
@@ -29,7 +29,7 @@ $this->title = '关于我们';
         left: 0;
         right: 0;
         bottom: 0;
-        background: rgba(0,0,0,0.5);
+        background: linear-gradient(135deg, rgba(139,0,0,0.85), rgba(0,0,0,0.7));
     }
     
     .about-header-content {
@@ -40,14 +40,17 @@ $this->title = '关于我们';
     }
     
     .about-header h1 {
-        font-size: 42px;
+        font-family: 'Noto Serif SC', serif;
+        font-size: 46px;
         font-weight: 700;
         margin-bottom: 12px;
+        color: #FFD700;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
     }
     
     .about-header p {
-        font-size: 18px;
-        opacity: 0.9;
+        font-size: 20px;
+        opacity: 0.95;
     }
     
     .about-container {
@@ -62,8 +65,9 @@ $this->title = '关于我们';
         background: white;
         border-radius: 12px;
         padding: 48px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        box-shadow: 0 4px 20px rgba(139,0,0,0.1);
         margin-bottom: 32px;
+        border: 1px solid rgba(139,0,0,0.05);
     }
     
     .about-section {
@@ -75,9 +79,10 @@ $this->title = '关于我们';
     }
     
     .about-section h2 {
+        font-family: 'Noto Serif SC', serif;
         font-size: 24px;
         font-weight: 600;
-        color: #1a1a1a;
+        color: #8B0000;
         margin-bottom: 20px;
         display: flex;
         align-items: center;
@@ -85,12 +90,12 @@ $this->title = '关于我们';
     }
     
     .about-section h2 i {
-        color: #e74c3c;
+        color: #B8860B;
     }
     
     .about-section p {
         font-size: 16px;
-        line-height: 1.8;
+        line-height: 1.9;
         color: #555;
         margin-bottom: 16px;
     }
@@ -105,14 +110,15 @@ $this->title = '关于我们';
     .team-member {
         text-align: center;
         padding: 32px 20px;
-        background: #f9f9f9;
+        background: linear-gradient(135deg, #f8f6f3, #fff);
         border-radius: 12px;
         transition: all 0.3s;
+        border: 1px solid rgba(139,0,0,0.08);
     }
     
     .team-member:hover {
         transform: translateY(-4px);
-        box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+        box-shadow: 0 8px 24px rgba(139,0,0,0.12);
     }
     
     .member-avatar {
@@ -130,6 +136,7 @@ $this->title = '关于我们';
     }
     
     .member-name {
+        font-family: 'Noto Serif SC', serif;
         font-size: 18px;
         font-weight: 600;
         color: #1a1a1a;
@@ -138,8 +145,9 @@ $this->title = '关于我们';
     
     .member-role {
         font-size: 14px;
-        color: #666;
+        color: #8B0000;
         margin-bottom: 8px;
+        font-weight: 500;
     }
     
     .member-id {
@@ -156,10 +164,11 @@ $this->title = '关于我们';
     
     .tech-item {
         padding: 8px 20px;
-        background: #f5f5f5;
+        background: #f8f6f3;
         border-radius: 20px;
         font-size: 14px;
         color: #666;
+        border: 1px solid rgba(139,0,0,0.08);
     }
     
     .feature-list {
@@ -182,7 +191,22 @@ $this->title = '关于我们';
     }
     
     .feature-list i {
-        color: #52c41a;
+        color: #B8860B;
+    }
+    
+    /* 特别高亮 */
+    .highlight-box {
+        background: linear-gradient(135deg, rgba(139,0,0,0.05), rgba(184,134,11,0.05));
+        border-left: 4px solid #8B0000;
+        padding: 20px 24px;
+        border-radius: 0 8px 8px 0;
+        margin: 20px 0;
+    }
+    
+    .highlight-box p {
+        margin: 0;
+        color: #8B0000;
+        font-weight: 500;
     }
 </style>
 
@@ -197,14 +221,18 @@ $this->title = '关于我们';
     <div class="about-card">
         <!-- 项目介绍 -->
         <div class="about-section">
-            <h2><i class="fas fa-info-circle"></i> 项目介绍</h2>
+            <h2><i class="fas fa-star"></i> 项目介绍</h2>
             <p>
                 本项目是南开大学计算机学院《互联网数据库开发》课程的团队大作业。
-                我们基于 Yii2 框架开发了一个功能完整的新闻资讯管理系统，
-                实现了新闻的发布、分类、评论等核心功能。
+                为纪念中国人民抗日战争暨世界反法西斯战争胜利80周年，
+                我们基于 Yii2 框架开发了这个纪念网站。
             </p>
+            <div class="highlight-box">
+                <p><i class="fas fa-quote-left"></i> 铭记历史，缅怀先烈，珍爱和平，开创未来。</p>
+            </div>
             <p>
                 系统采用 MVC 设计模式，前后端分离，包含用户友好的前台展示界面和功能完善的后台管理系统。
+                通过本项目，我们希望让更多人了解那段波澜壮阔的历史，铭记先烈们的英勇事迹。
             </p>
         </div>
         
@@ -219,7 +247,7 @@ $this->title = '关于我们';
                     <div class="member-id">学号: XXXXXXX</div>
                 </div>
                 <div class="team-member">
-                    <div class="member-avatar" style="background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);">刘</div>
+                    <div class="member-avatar" style="background: linear-gradient(135deg, #8B0000 0%, #B8860B 100%);">刘</div>
                     <div class="member-name">刘浩泽</div>
                     <div class="member-role">首页 + 文章管理</div>
                     <div class="member-id">学号: 2212478</div>
@@ -255,14 +283,15 @@ $this->title = '关于我们';
         
         <!-- 功能特性 -->
         <div class="about-section">
-            <h2><i class="fas fa-star"></i> 功能特性</h2>
+            <h2><i class="fas fa-list-check"></i> 功能特性</h2>
             <ul class="feature-list">
-                <li><i class="fas fa-check-circle"></i> 新闻文章的增删改查管理</li>
-                <li><i class="fas fa-check-circle"></i> 新闻分类管理</li>
-                <li><i class="fas fa-check-circle"></i> 用户评论系统</li>
+                <li><i class="fas fa-check-circle"></i> 抗战历史内容的增删改查管理</li>
+                <li><i class="fas fa-check-circle"></i> 专题分类管理（战役、人物、遗址等）</li>
+                <li><i class="fas fa-check-circle"></i> 用户评论与留言系统</li>
+                <li><i class="fas fa-check-circle"></i> 团队展示页面</li>
                 <li><i class="fas fa-check-circle"></i> 后台管理系统</li>
                 <li><i class="fas fa-check-circle"></i> 响应式前台展示</li>
-                <li><i class="fas fa-check-circle"></i> 用户认证与权限管理</li>
+                <li><i class="fas fa-check-circle"></i> 动态图形统计展示</li>
             </ul>
         </div>
     </div>

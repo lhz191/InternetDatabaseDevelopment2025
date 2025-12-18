@@ -12,8 +12,8 @@ use yii\helpers\Url;
 
 $this->title = $article->title;
 
-// 随机图片
-$headerImage = 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1400';
+// 抗战主题图片
+$headerImage = 'https://images.unsplash.com/photo-1580130544401-f4bd0c41e946?w=1400';
 ?>
 
 <style>
@@ -32,7 +32,7 @@ $headerImage = 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1
         left: 0;
         right: 0;
         bottom: 0;
-        background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.2) 100%);
+        background: linear-gradient(to top, rgba(139,0,0,0.85) 0%, rgba(0,0,0,0.3) 100%);
     }
     
     .article-header-content {
@@ -48,10 +48,13 @@ $headerImage = 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1
     .article-category-tag {
         display: inline-block;
         padding: 6px 16px;
-        background: #e74c3c;
+        background: linear-gradient(135deg, #8B0000, #6B0000);
+        color: #FFD700;
         border-radius: 4px;
         font-size: 13px;
         margin-bottom: 16px;
+        font-weight: 600;
+        letter-spacing: 1px;
     }
     
     .article-title {
@@ -179,7 +182,7 @@ $headerImage = 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1
         width: 48px;
         height: 48px;
         border-radius: 50%;
-        background: linear-gradient(135deg, #e74c3c, #c0392b);
+        background: linear-gradient(135deg, #8B0000, #B8860B);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -205,8 +208,8 @@ $headerImage = 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1
     
     .comment-input:focus {
         outline: none;
-        border-color: #e74c3c;
-        box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+        border-color: #8B0000;
+        box-shadow: 0 0 0 3px rgba(139, 0, 0, 0.1);
     }
     
     .comment-form-footer {
@@ -223,8 +226,8 @@ $headerImage = 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1
     
     .comment-submit-btn {
         padding: 10px 24px;
-        background: linear-gradient(135deg, #e74c3c, #c0392b);
-        color: white;
+        background: linear-gradient(135deg, #8B0000, #6B0000);
+        color: #FFD700;
         border: none;
         border-radius: 6px;
         font-size: 14px;
@@ -237,7 +240,7 @@ $headerImage = 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1
     
     .comment-submit-btn:hover {
         transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+        box-shadow: 0 4px 12px rgba(139, 0, 0, 0.3);
     }
     
     .comments-title {
@@ -250,8 +253,8 @@ $headerImage = 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1
     }
     
     .comments-count {
-        background: #e74c3c;
-        color: white;
+        background: linear-gradient(135deg, #8B0000, #6B0000);
+        color: #FFD700;
         padding: 2px 10px;
         border-radius: 12px;
         font-size: 13px;
@@ -327,11 +330,11 @@ $headerImage = 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1
     }
     
     .comment-action:hover {
-        color: #e74c3c;
+        color: #8B0000;
     }
     
     .comment-action.liked {
-        color: #e74c3c;
+        color: #8B0000;
     }
     
     .no-comments {
@@ -599,7 +602,7 @@ $headerImage = 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1
     left: 0;
     width: 0;
     height: 3px;
-    background: linear-gradient(90deg, #e74c3c, #ff6b6b);
+    background: linear-gradient(90deg, #8B0000, #FFD700);
     z-index: 9999;
     transition: width 0.1s;
 }
@@ -643,7 +646,7 @@ $headerImage = 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1
 }
 
 .like-btn:hover, .like-btn.liked {
-    color: #e74c3c;
+    color: #8B0000;
     background: #fff5f5;
 }
 
@@ -722,12 +725,12 @@ $headerImage = 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1
 }
 
 .share-item.weibo {
-    background: #ff5722;
-    color: white;
+    background: linear-gradient(135deg, #8B0000, #6B0000);
+    color: #FFD700;
 }
 
 .share-item.copy {
-    background: #1890ff;
+    background: linear-gradient(135deg, #B8860B, #8B6914);
     color: white;
 }
 
