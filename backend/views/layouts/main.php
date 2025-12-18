@@ -44,6 +44,9 @@ AppAsset::register($this);
         ['label' => '团队管理', 'url' => ['/team-department/index']],
         ['label' => '成员管理', 'url' => ['/team-member/index']],
         ['label' => '留言管理', 'url' => ['/guest-book/index']],
+        ['label' => '友情链接', 'url' => ['/link/index']],
+        ['label' => '标签管理', 'url' => ['/tag/index']],
+        ['label' => '日志管理', 'url' => ['/visit-log/index']],
     ];
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => '登录', 'url' => ['/site/login']];

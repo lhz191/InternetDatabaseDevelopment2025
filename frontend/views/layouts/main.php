@@ -1,8 +1,7 @@
 <?php
 /**
  * 前台主布局文件 (View层)
- * 
- * @author 刘浩泽 (2212478)
+ * * @author 刘浩泽 (2212478)
  * @date 2025-12-08
  * @description 前台网站主布局，包含导航、页脚等公共部分
  */
@@ -11,7 +10,36 @@ use frontend\assets\AppAsset;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
+// --- 【新增 1】 引入模型类 
+use common\models\Link;
+use common\models\Tag;
+use common\models\VisitLog;
+
 AppAsset::register($this);
+
+// --- 【新增 2】 自动记录访问日志 ---
+try {
+    $log = new VisitLog();
+    $log->page_url = Yii::$app->request->absoluteUrl;
+    $log->ip_address = Yii::$app->request->userIP;
+    $log->user_agent = Yii::$app->request->userAgent;
+    // visit_time 数据库通常有默认值 CURRENT_TIMESTAMP
+    $log->save();
+} catch (\Exception $e) {
+    // 忽略日志错误，不影响页面显示
+}
+
+// --- 【新增 3】 获取标签和链接数据 ---
+$hotTags = [];
+$friendLinks = [];
+try {
+    // 获取前10个热门标签
+    $hotTags = Tag::find()->orderBy(['frequency' => SORT_DESC])->limit(10)->all();
+    // 获取所有友情链接
+    $friendLinks = Link::find()->orderBy(['sort_order' => SORT_ASC])->all();
+} catch (\Exception $e) {
+    // 忽略数据库错误（防止表还没建好时报错）
+}
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -26,6 +54,7 @@ AppAsset::register($this);
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <?php $this->head() ?>
     <style>
+        /* ================== 原有 CSS 样式 (保持不变) ================== */
         * {
             margin: 0;
             padding: 0;
@@ -420,64 +449,95 @@ AppAsset::register($this);
             .nav-links { display: none; }
             .hero-banner { height: 300px; }
         }
+
+        /* --- 【新增 4】 仅追加了标签云的样式，不影响其他布局 --- */
+        .tag-cloud { display: flex; flex-wrap: wrap; gap: 8px; }
+        .footer-tag { 
+            background: #333; 
+            color: #ccc; 
+            padding: 4px 10px; 
+            border-radius: 4px; 
+            font-size: 12px; 
+            text-decoration: none; 
+            transition: 0.2s; 
+            display: inline-block;
+        }
+        .footer-tag:hover { background: #e74c3c; color: white; }
     </style>
 </head>
 <body>
 <?php $this->beginBody() ?>
 
-<!-- 导航栏 -->
 <nav class="navbar">
     <div class="navbar-container">
         <a href="<?= Url::to(['/site/index']) ?>" class="logo">
             <i class="fas fa-newspaper"></i> 新闻资讯
         </a>
         <ul class="nav-links">
-            <li><a href="<?= Url::to(['/site/index']) ?>" class="<?= Yii::$app->controller->id == 'site' && Yii::$app->controller->action->id == 'index' ? 'active' : '' ?>">首页</a></li>   
-            <li><a href="<?= Url::to(['/site/news']) ?>" class="<?= Yii::$app->controller->action->id == 'news' ? 'active' : '' ?>">新闻</a></li>    
-            <li><a href="<?= Url::to(['/team/index']) ?>" class="<?= Yii::$app->controller->id == 'team' ? 'active' : '' ?>">团队介绍</a></li>    
-            <li><a href="<?= Url::to(['/guestbook/index']) ?>" class="<?= Yii::$app->controller->id == 'guestbook' ? 'active' : '' ?>">留言板</a></li>    
+            <li><a href="<?= Url::to(['/site/index']) ?>" class="<?= Yii::$app->controller->id == 'site' && Yii::$app->controller->action->id == 'index' ? 'active' : '' ?>">首页</a></li>
+            <li><a href="<?= Url::to(['/site/news']) ?>" class="<?= Yii::$app->controller->action->id == 'news' ? 'active' : '' ?>">新闻</a></li>
+            <li><a href="<?= Url::to(['/team/index']) ?>" class="<?= Yii::$app->controller->id == 'team' ? 'active' : '' ?>">团队介绍</a></li>
+            <li><a href="<?= Url::to(['/guestbook/index']) ?>" class="<?= Yii::$app->controller->id == 'guestbook' ? 'active' : '' ?>">留言板</a></li>
             <li><a href="<?= Url::to(['/site/about']) ?>" class="<?= Yii::$app->controller->action->id == 'about' ? 'active' : '' ?>">关于</a></li>
             <li><a href="<?= Url::to(['/site/contact']) ?>" class="<?= Yii::$app->controller->action->id == 'contact' ? 'active' : '' ?>">联系</a></li>
         </ul>
     </div>
 </nav>
 
-<!-- 主要内容 -->
 <main class="main-content">
     <?= $content ?>
 </main>
 
-<!-- 页脚 -->
 <footer class="footer">
     <div class="footer-content">
         <div class="footer-grid">
             <div class="footer-brand">
                 <h3><i class="fas fa-newspaper"></i> 新闻资讯</h3>
                 <p>南开大学互联网数据库课程设计项目<br>基于 Yii2 框架开发的新闻资讯管理系统</p>
+                <p style="font-size: 12px; color: #666; margin-top: 10px;">
+                    <i class="fas fa-eye"></i> 今日访问IP: <?= Html::encode(Yii::$app->request->userIP) ?>
+                </p>
             </div>
+            
             <div class="footer-column">
                 <h4>快速导航</h4>
                 <ul>
                     <li><a href="<?= Url::to(['/site/index']) ?>">首页</a></li>
                     <li><a href="<?= Url::to(['/site/news']) ?>">新闻列表</a></li>
-                    <li><a href="<?= Url::to(['/site/about']) ?>">关于我们</a></li>
+                    <li><a href="<?= Url::to(['/team/index']) ?>">团队介绍</a></li>
                 </ul>
             </div>
+            
             <div class="footer-column">
-                <h4>分类</h4>
-                <ul>
-                    <li><a href="#">国内新闻</a></li>
-                    <li><a href="#">国际新闻</a></li>
-                    <li><a href="#">科技前沿</a></li>
-                </ul>
+                <h4>热门标签</h4>
+                <?php if (!empty($hotTags)): ?>
+                    <div class="tag-cloud">
+                        <?php foreach ($hotTags as $tag): ?>
+                            <a href="<?= Url::to(['/site/news', 'tag' => $tag->name]) ?>" class="footer-tag">#<?= Html::encode($tag->name) ?></a>
+                        <?php endforeach; ?>
+                    </div>
+                <?php else: ?>
+                    <p style="color: #666; font-size: 13px;">暂无标签</p>
+                <?php endif; ?>
             </div>
+            
             <div class="footer-column">
-                <h4>联系方式</h4>
+                <h4>友情链接</h4>
                 <ul>
-                    <li><a href="#"><i class="fas fa-envelope"></i> admin@nankai.edu.cn</a></li>
-                    <li><a href="#"><i class="fab fa-github"></i> GitHub</a></li>
+                    <?php if (!empty($friendLinks)): ?>
+                        <?php foreach ($friendLinks as $link): ?>
+                            <li>
+                                <a href="<?= Html::encode($link->url) ?>" target="_blank">
+                                    <i class="fas fa-link"></i> <?= Html::encode($link->name) ?>
+                                </a>
+                            </li>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <li><a href="#">南开大学</a></li>
+                        <li><a href="#">计算机学院</a></li>
+                    <?php endif; ?>
                 </ul>
-            </div>
+            </div>           
         </div>
         <div class="footer-bottom">
             © 2025 新闻资讯管理系统 · 南开大学 · Powered by Yii2

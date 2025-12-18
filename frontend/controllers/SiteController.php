@@ -16,6 +16,7 @@ use common\models\PreNewsArticle;
 use common\models\PreNewsCategory;
 use common\models\PreNewsComment;
 use yii\data\ActiveDataProvider;
+use common\models\Tag;
 
 class SiteController extends Controller
 {
@@ -63,15 +64,31 @@ class SiteController extends Controller
     }
 
     /**
-     * 新闻列表
+     * 新闻列表 (支持分类筛选 cid 和 标签筛选 tag)
      */
-    public function actionNews($cid = null)
+    public function actionNews($cid = null, $tag = null)
     {
         $query = PreNewsArticle::find()
             ->where(['status' => PreNewsArticle::STATUS_PUBLISHED]);
         
+        // 1. 分类筛选
         if ($cid) {
             $query->andWhere(['cid' => $cid]);
+        }
+
+        // 2. 标签筛选 (新增逻辑)
+        if ($tag) {
+            // 先查找标签是否存在
+            $tagModel = Tag::findOne(['name' => $tag]);
+            if ($tagModel) {
+                // 使用 innerJoin 关联中间表 (pre_article_tag)
+                // 逻辑：文章表(aid) <-> 中间表(aid, tid) <-> 标签表(id)
+                $query->innerJoin('pre_article_tag', 'pre_article_tag.aid = pre_news_article.aid')
+                      ->andWhere(['pre_article_tag.tid' => $tagModel->id]);
+            } else {
+                // 如果标签不存在，则不显示任何文章
+                $query->andWhere('0=1');
+            }
         }
 
         $dataProvider = new ActiveDataProvider([
@@ -95,6 +112,7 @@ class SiteController extends Controller
             'dataProvider' => $dataProvider,
             'categories' => $categories,
             'currentCategory' => $currentCategory,
+            'currentTag' => $tag, // 将标签传给视图（可选，用于在页面显示当前筛选的标签）
         ]);
     }
 
