@@ -1,6 +1,8 @@
-# 📰 新闻资讯管理系统
+# 🏆 抗战胜利80周年纪念网站
 
 南开大学 计算机学院 《互联网数据库开发》课程设计项目
+
+**主题：军事主题——抗战胜利80周年**
 
 ![Yii2](https://img.shields.io/badge/Yii2-2.0.32-blue)
 ![PHP](https://img.shields.io/badge/PHP-8.x-purple)
@@ -9,10 +11,10 @@
 
 ## 📋 项目介绍
 
-本项目是一个功能完整的新闻资讯管理系统，采用 Yii2 框架开发，包含：
+本项目是纪念中国人民抗日战争暨世界反法西斯战争胜利80周年的主题网站，采用 Yii2 框架开发，包含：
 
-- **前台展示网站**：新闻浏览、分类筛选、文章详情、评论展示
-- **后台管理系统**：用户管理、分类管理、文章管理、评论管理
+- **前台展示网站**：抗战历史专题浏览、历史时间线、英雄人物、战役记录、纪念活动
+- **后台管理系统**：用户管理、分类管理、文章管理、评论管理、数据统计
 
 ## 🖥️ 在线预览
 
@@ -113,12 +115,12 @@ advanced/
 
 ## 👥 团队分工
 
-| 成员 | 模块 | Model | Controller | View |
-|-----|------|-------|------------|------|
-| 组员A | 用户管理 | PreSysUser | UserController | user/* |
-| 组员B | 分类管理 | PreNewsCategory | CategoryController | category/* |
-| 刘浩泽 (2212478) | 首页+文章管理 | PreNewsArticle | ArticleController, SiteController | article/*, site/index,view,news |
-| 组员D | 评论管理 | PreNewsComment | CommentController | comment/* |
+| 成员 | 负责模块 |
+|-----|----------|
+| 组员A | 用户管理 |
+| 刘浩泽 (2212478) | 首页 + 文章管理 + 分类管理 + 爬虫 |
+| 组员C | 留言板 + 团队展示 |
+| 组员D | 评论管理 |
 
 ## 📄 作业文档
 
