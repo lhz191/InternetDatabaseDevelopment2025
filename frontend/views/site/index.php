@@ -286,4 +286,225 @@ $warImages = [
 .timeline-item.victory .timeline-content h4 {
     color: #8B0000;
 }
+
+/* 数据统计图表样式 */
+.stats-section {
+    margin-top: 60px;
+    margin-bottom: 40px;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+}
+
+@media (max-width: 768px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.chart-card {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+.chart-card h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0 0 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.chart-card h3 i {
+    color: #8B0000;
+}
+
+.chart-container {
+    height: 300px;
+}
+
+.stats-summary {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+@media (max-width: 768px) {
+    .stats-summary {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.stat-item {
+    background: linear-gradient(135deg, #f8f4f0 0%, #fff 100%);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    border: 1px solid #f0e8e0;
+}
+
+.stat-item .number {
+    font-size: 32px;
+    font-weight: 700;
+    color: #8B0000;
+    display: block;
+}
+
+.stat-item .label {
+    font-size: 14px;
+    color: #666;
+    margin-top: 4px;
+}
 </style>
+
+<!-- 引入ECharts -->
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+
+<!-- 数据统计模块 -->
+<div class="container">
+    <div class="section-header" style="margin-top: 60px;">
+        <h2 class="section-title">数据统计</h2>
+    </div>
+    
+    <!-- 统计概览 -->
+    <div class="stats-summary">
+        <div class="stat-item">
+            <span class="number">520</span>
+            <span class="label">历史专题</span>
+        </div>
+        <div class="stat-item">
+            <span class="number">8</span>
+            <span class="label">专题分类</span>
+        </div>
+        <div class="stat-item">
+            <span class="number">125K</span>
+            <span class="label">总浏览量</span>
+        </div>
+        <div class="stat-item">
+            <span class="number">8.5K</span>
+            <span class="label">总点赞数</span>
+        </div>
+    </div>
+    
+    <!-- 图表区域 -->
+    <div class="stats-section">
+        <div class="stats-grid">
+            <div class="chart-card">
+                <h3><i class="fas fa-chart-line"></i> 近30天访问趋势</h3>
+                <div id="trendChart" class="chart-container"></div>
+            </div>
+            <div class="chart-card">
+                <h3><i class="fas fa-chart-pie"></i> 分类内容分布</h3>
+                <div id="categoryChart" class="chart-container"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// 访问趋势图
+var trendChart = echarts.init(document.getElementById('trendChart'));
+var trendOption = {
+    tooltip: {
+        trigger: 'axis',
+        axisPointer: { type: 'shadow' }
+    },
+    legend: {
+        data: ['浏览量', '点赞数'],
+        top: 0
+    },
+    grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+    },
+    xAxis: {
+        type: 'category',
+        data: ['11/18', '11/20', '11/22', '11/24', '11/26', '11/28', '11/30', '12/02', '12/04', '12/06', '12/08', '12/10', '12/12', '12/14', '12/16', '12/18'],
+        axisLabel: { rotate: 45 }
+    },
+    yAxis: { type: 'value' },
+    series: [
+        {
+            name: '浏览量',
+            type: 'line',
+            smooth: true,
+            data: [1200, 1450, 1680, 1100, 1280, 1890, 1380, 780, 1200, 980, 1150, 1480, 1820, 1350, 1720, 1450],
+            itemStyle: { color: '#8B0000' },
+            areaStyle: {
+                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                    { offset: 0, color: 'rgba(139,0,0,0.3)' },
+                    { offset: 1, color: 'rgba(139,0,0,0.05)' }
+                ])
+            }
+        },
+        {
+            name: '点赞数',
+            type: 'line',
+            smooth: true,
+            data: [89, 102, 125, 82, 91, 145, 95, 55, 88, 72, 85, 108, 138, 96, 128, 102],
+            itemStyle: { color: '#FFD700' }
+        }
+    ]
+};
+trendChart.setOption(trendOption);
+
+// 分类分布饼图
+var categoryChart = echarts.init(document.getElementById('categoryChart'));
+var categoryOption = {
+    tooltip: {
+        trigger: 'item',
+        formatter: '{b}: {c} ({d}%)'
+    },
+    legend: {
+        orient: 'vertical',
+        right: 10,
+        top: 'center'
+    },
+    series: [{
+        type: 'pie',
+        radius: ['40%', '70%'],
+        center: ['35%', '50%'],
+        avoidLabelOverlap: false,
+        itemStyle: {
+            borderRadius: 8,
+            borderColor: '#fff',
+            borderWidth: 2
+        },
+        label: { show: false },
+        emphasis: {
+            label: {
+                show: true,
+                fontSize: 16,
+                fontWeight: 'bold'
+            }
+        },
+        data: [
+            { value: 85, name: '重大战役', itemStyle: { color: '#8B0000' } },
+            { value: 72, name: '英雄人物', itemStyle: { color: '#B8860B' } },
+            { value: 45, name: '历史遗址', itemStyle: { color: '#4a4a4a' } },
+            { value: 58, name: '抗战文化', itemStyle: { color: '#1890ff' } },
+            { value: 63, name: '纪念活动', itemStyle: { color: '#52c41a' } },
+            { value: 38, name: '历史档案', itemStyle: { color: '#722ed1' } },
+            { value: 52, name: '老兵故事', itemStyle: { color: '#13c2c2' } },
+            { value: 67, name: '国际视角', itemStyle: { color: '#eb2f96' } }
+        ]
+    }]
+};
+categoryChart.setOption(categoryOption);
+
+// 响应式
+window.addEventListener('resize', function() {
+    trendChart.resize();
+    categoryChart.resize();
+});
+</script>
