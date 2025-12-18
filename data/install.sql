@@ -146,6 +146,104 @@ INSERT INTO `pre_sys_config` (`name`, `key`, `value`, `description`) VALUES
 
 SET FOREIGN_KEY_CHECKS = 1;
 
+-- ----------------------------
+-- 6. 部门/团队表 (pre_team_department)
+-- 用于前台“团队展示”
+-- ----------------------------
+DROP TABLE IF EXISTS `pre_team_department`;
+CREATE TABLE `pre_team_department` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL COMMENT '部门名称',
+  `description` varchar(255) DEFAULT NULL COMMENT '部门职能描述',
+  `sort_order` int(11) DEFAULT 0 COMMENT '排序',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='团队部门表';
+
+-- ----------------------------
+-- 7. 团队成员表 (pre_team_member)
+-- 用于前台“个人信息展示”
+-- ----------------------------
+DROP TABLE IF EXISTS `pre_team_member`;
+CREATE TABLE `pre_team_member` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `dept_id` int(11) NOT NULL COMMENT '所属部门ID',
+  `name` varchar(50) NOT NULL COMMENT '姓名',
+  `position` varchar(100) DEFAULT NULL COMMENT '职位',
+  `avatar` varchar(255) DEFAULT NULL COMMENT '照片路径',
+  `bio` text COMMENT '个人简介',
+  `email` varchar(100) DEFAULT NULL,
+  `status` tinyint(1) DEFAULT 1 COMMENT '1在职 0离职',
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `idx_dept` (`dept_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='团队成员表';
+
+-- ----------------------------
+-- 8. 留言板表 (pre_guestbook)
+-- 用于前台“留言”功能
+-- ----------------------------
+DROP TABLE IF EXISTS `pre_guestbook`;
+CREATE TABLE `pre_guestbook` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nickname` varchar(50) NOT NULL COMMENT '留言者昵称',
+  `email` varchar(100) DEFAULT NULL,
+  `content` text NOT NULL COMMENT '留言内容',
+  `ip_address` varchar(50) DEFAULT NULL COMMENT '留言IP',
+  `is_read` tinyint(1) DEFAULT 0 COMMENT '管理员是否已读',
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='留言板表';
+
+-- ----------------------------
+-- 9. 访问日志表 (pre_visit_log)
+-- 用于后台“动态图形展示”（统计访问量）
+-- ----------------------------
+DROP TABLE IF EXISTS `pre_visit_log`;
+CREATE TABLE `pre_visit_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `page_url` varchar(255) NOT NULL,
+  `ip_address` varchar(50) DEFAULT NULL,
+  `user_agent` varchar(255) DEFAULT NULL,
+  `visit_time` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `idx_time` (`visit_time`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='访问日志表';
+
+-- ----------------------------
+-- 10. 标签表 (pre_tag)
+-- 丰富新闻功能
+-- ----------------------------
+DROP TABLE IF EXISTS `pre_tag`;
+CREATE TABLE `pre_tag` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL COMMENT '标签名',
+  `frequency` int(11) DEFAULT 0 COMMENT '使用频率',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='新闻标签表';
+
+-- ----------------------------
+-- 11. 文章-标签关联表 (pre_article_tag)
+-- ----------------------------
+DROP TABLE IF EXISTS `pre_article_tag`;
+CREATE TABLE `pre_article_tag` (
+  `aid` int(11) NOT NULL,
+  `tid` int(11) NOT NULL,
+  PRIMARY KEY (`aid`, `tid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='文章标签关联表';
+
+-- ----------------------------
+-- 12. 友情链接表 (pre_link)
+-- ----------------------------
+DROP TABLE IF EXISTS `pre_link`;
+CREATE TABLE `pre_link` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL,
+  `url` varchar(255) NOT NULL,
+  `sort_order` int(11) DEFAULT 0,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='友情链接表';
+
+
 -- ============================================
 -- 数据库设计完成
 -- 共5张表：用户、分类、文章、评论、配置
