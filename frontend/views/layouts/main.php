@@ -432,10 +432,10 @@ AppAsset::register($this);
             <i class="fas fa-newspaper"></i> 新闻资讯
         </a>
         <ul class="nav-links">
-            <li><a href="<?= Url::to(['/site/index']) ?>" class="<?= Yii::$app->controller->action->id == 'index' ? 'active' : '' ?>">首页</a></li>
-            <li><a href="<?= Url::to(['/site/news']) ?>" class="<?= Yii::$app->controller->action->id == 'news' ? 'active' : '' ?>">新闻</a></li>
-            <li><a href="<?= Url::to(['/team/index']) ?>" class="<?= Yii::$app->controller->id == 'team' ? 'active' : '' ?>">团队介绍</a></li>
-            <li><a href="<?= Url::to(['/guestbook/index']) ?>" class="<?= Yii::$app->controller->id == 'guestbook' ? 'active' : '' ?>">留言板</a></li>
+            <li><a href="<?= Url::to(['/site/index']) ?>" class="<?= Yii::$app->controller->id == 'site' && Yii::$app->controller->action->id == 'index' ? 'active' : '' ?>">首页</a></li>   
+            <li><a href="<?= Url::to(['/site/news']) ?>" class="<?= Yii::$app->controller->action->id == 'news' ? 'active' : '' ?>">新闻</a></li>    
+            <li><a href="<?= Url::to(['/team/index']) ?>" class="<?= Yii::$app->controller->id == 'team' ? 'active' : '' ?>">团队介绍</a></li>    
+            <li><a href="<?= Url::to(['/guestbook/index']) ?>" class="<?= Yii::$app->controller->id == 'guestbook' ? 'active' : '' ?>">留言板</a></li>    
             <li><a href="<?= Url::to(['/site/about']) ?>" class="<?= Yii::$app->controller->action->id == 'about' ? 'active' : '' ?>">关于</a></li>
             <li><a href="<?= Url::to(['/site/contact']) ?>" class="<?= Yii::$app->controller->action->id == 'contact' ? 'active' : '' ?>">联系</a></li>
         </ul>
