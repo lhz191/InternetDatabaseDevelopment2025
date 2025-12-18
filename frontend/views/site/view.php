@@ -790,16 +790,19 @@ window.addEventListener('scroll', function() {
 function likeArticle(aid) {
     var btn = document.querySelector('.like-btn');
     if (btn.classList.contains('liked')) {
-        alert('您已经点赞过了');
-        return;
+        return; // 已点赞直接返回，不弹窗打扰用户
     }
     
-    var url = 'index.php?r=site/like&id=' + aid;
-    
+    var url = '<?= Url::to(['site/like']) ?>?id=' + aid;
+    // 获取 CSRF Token
+    var csrfToken = document.querySelector('meta[name="csrf-token"]') ? 
+                    document.querySelector('meta[name="csrf-token"]').getAttribute('content') : '';
+
     fetch(url, {
         method: 'POST',
         headers: {
-            'X-Requested-With': 'XMLHttpRequest'
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRF-Token': csrfToken // 添加这一行
         }
     })
     .then(response => response.json())
@@ -807,7 +810,6 @@ function likeArticle(aid) {
         if (data.success) {
             btn.classList.add('liked');
             document.getElementById('likeCount').textContent = data.likes;
-            // 添加动画效果
             btn.style.transform = 'scale(1.2)';
             setTimeout(() => { btn.style.transform = 'scale(1)'; }, 200);
         } else {
@@ -816,7 +818,6 @@ function likeArticle(aid) {
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('点赞失败，请稍后重试');
     });
 }
 
@@ -860,16 +861,36 @@ function submitComment() {
         return;
     }
     
-    if (content.length < 5) {
-        alert('评论内容至少5个字符');
-        return;
-    }
+    // 获取 CSRF Token (Yii2 安全机制必须)
+    var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     
-    // 这里只是UI演示，实际提交逻辑由评论模块的同学实现
-    // TODO: 评论模块同学需要实现 site/comment 或 comment/create action
-    alert('评论功能由评论模块实现，请联系负责评论模块的同学完成后端接口');
-    
-    // 模拟成功效果（实际项目中应该是AJAX提交后刷新评论列表）
-    // document.getElementById('commentInput').value = '';
+    // 构建提交数据
+    var formData = new FormData();
+    formData.append('article_id', <?= $article->aid ?>); // 注入文章ID
+    formData.append('content', content);
+
+    // 发送请求 (假设后端路由为 site/comment)
+    fetch('<?= Url::to(['site/comment']) ?>', {
+        method: 'POST',
+        headers: {
+            'X-CSRF-Token': csrfToken,
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('评论发表成功！');
+            document.getElementById('commentInput').value = ''; // 清空输入框
+            location.reload(); // 简单处理：刷新页面显示新评论
+        } else {
+            alert(data.message || '评论失败');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('网络错误，请稍后重试');
+    });
 }
 </script>

@@ -121,36 +121,105 @@ class SiteController extends Controller
      */
     public function actionView($id)
     {
-        $article = PreNewsArticle::findOne(['aid' => $id, 'status' => PreNewsArticle::STATUS_PUBLISHED]);
+        $model = PreNewsArticle::findOne($id);
         
-        if (!$article) {
-            throw new \yii\web\NotFoundHttpException('文章不存在');
-        }
-
-        // 增加浏览量
-        $article->increaseViews();
-
-        // 获取评论
+        // 1. 获取该文章下的所有审核通过的评论
         $comments = PreNewsComment::find()
-            ->where(['aid' => $id, 'status' => PreNewsComment::STATUS_APPROVED])
+            ->where(['aid' => $id, 'status' => 1]) // status=1 表示已发布/已审核
             ->orderBy(['created_at' => SORT_DESC])
             ->all();
 
-        // 获取相关文章
-        $relatedArticles = PreNewsArticle::find()
-            ->where(['status' => PreNewsArticle::STATUS_PUBLISHED, 'cid' => $article->cid])
-            ->andWhere(['!=', 'aid', $id])
-            ->orderBy(['created_at' => SORT_DESC])
-            ->limit(3)
-            ->all();
+        // 2. 实例化一个新的评论模型，给表单用
+        $newComment = new PreNewsComment();
+        $newComment->aid = $id; // 预先填好文章ID
 
         return $this->render('view', [
-            'article' => $article,
-            'comments' => $comments,
-            'relatedArticles' => $relatedArticles,
+            'article' => $model,
+            'comments' => $comments,    // 传给视图：评论列表
+            'newComment' => $newComment // 传给视图：新评论表单对象
         ]);
     }
 
+    /**
+ * 处理 AJAX 评论提交
+ */
+public function actionComment()
+{
+    // 1. 设置返回格式为 JSON
+    Yii::$app->response->format = Response::FORMAT_JSON;
+
+    // 2. 接收 POST 数据
+    $request = Yii::$app->request;
+    $articleId = $request->post('article_id');
+    $content = $request->post('content');
+
+    // 简单校验
+    if (!$articleId || !$content) {
+        return ['success' => false, 'message' => '参数缺失'];
+    }
+
+    // ==========================================
+    // 3. 关键步骤：先创建对象 (实例化)
+    // ==========================================
+    $model = new PreNewsComment(); 
+
+    // 4. 然后才能赋值
+    $model->aid = $articleId;
+    $model->content = $content;
+
+    // 处理游客/登录用户
+    if (Yii::$app->user->isGuest) {
+        // 如果是游客，指定一个默认的用户ID 
+        // 警告：确保你的 user 表里有 id=1 的用户，否则外键约束会报错！
+        $model->uid = 1; 
+    } else {
+        // 如果已登录，使用当前用户ID
+        $model->uid = Yii::$app->user->isGuest ? 1 : Yii::$app->user->id;
+    }
+
+    // 5. 保存并返回结果
+    if ($model->save()) {
+        return ['success' => true, 'message' => '评论成功'];
+    } else {
+        return [
+            'success' => false, 
+            'message' => '保存失败：' . implode(', ', $model->getFirstErrors())
+        ];
+    }
+}
+
+    /**
+     * 提交评论动作 (新增)
+     */
+    public function actionAddComment()
+    {
+        $model = new PreNewsComment();
+
+        if ($model->load(Yii::$app->request->post())) {
+            // 1. 检查是否登录
+            if (Yii::$app->user->isGuest) {
+                Yii::$app->session->setFlash('error', '请先登录后再评论！');
+                return $this->redirect(['site/login']);
+            }
+
+            // 2. 自动填充字段
+            $model->uid = Yii::$app->user->id; // 当前登录用户ID
+            $model->status = 1; // 默认状态：1直接发布 (如果是0则需要后台审核)
+            $model->created_at = date('Y-m-d H:i:s');
+
+            // 3. 保存
+            if ($model->save()) {
+                Yii::$app->session->setFlash('success', '评论发表成功！');
+            } else {
+                Yii::$app->session->setFlash('error', '评论失败：' . implode(',', $model->getFirstErrors()));
+            }
+            
+            // 4. 跳回文章页
+            return $this->redirect(['site/view', 'id' => $model->aid]);
+        }
+
+        return $this->goHome();
+    }
     /**
      * 关于我们
      */
