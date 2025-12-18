@@ -11,7 +11,6 @@ use common\models\User;
 class SignupForm extends Model
 {
     public $username;
-    public $email;
     public $password;
 
 
@@ -22,18 +21,12 @@ class SignupForm extends Model
     {
         return [
             ['username', 'trim'],
-            ['username', 'required'],
-            ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This username has already been taken.'],
+            ['username', 'required', 'message' => '用户名不能为空'],
+            ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => '用户名已存在，请重新命名'],
             ['username', 'string', 'min' => 2, 'max' => 255],
 
-            ['email', 'trim'],
-            ['email', 'required'],
-            ['email', 'email'],
-            ['email', 'string', 'max' => 255],
-            ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This email address has already been taken.'],
-
-            ['password', 'required'],
-            ['password', 'string', 'min' => 6],
+            ['password', 'required', 'message' => '密码不能为空'],
+            ['password', 'string', 'min' => 6, 'message' => '密码至少包含6个字符'],
         ];
     }
 
@@ -50,30 +43,13 @@ class SignupForm extends Model
         
         $user = new User();
         $user->username = $this->username;
-        $user->email = $this->email;
+        $user->email = $this->username . '@example.com'; // 填充一个默认邮箱，避免非空约束
+        $user->status = User::STATUS_ACTIVE; // 直接设置为激活状态
         $user->setPassword($this->password);
         $user->generateAuthKey();
         $user->generateEmailVerificationToken();
-        return $user->save() && $this->sendEmail($user);
-
-    }
-
-    /**
-     * Sends confirmation email to user
-     * @param User $user user model to with email should be send
-     * @return bool whether the email was sent
-     */
-    protected function sendEmail($user)
-    {
-        return Yii::$app
-            ->mailer
-            ->compose(
-                ['html' => 'emailVerify-html', 'text' => 'emailVerify-text'],
-                ['user' => $user]
-            )
-            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name . ' robot'])
-            ->setTo($this->email)
-            ->setSubject('Account registration at ' . Yii::$app->name)
-            ->send();
+        
+        // 直接保存，不需要发送邮件
+        return $user->save();
     }
 }

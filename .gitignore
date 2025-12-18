@@ -34,3 +34,6 @@ codeception.yml
 # 调试文件
 *.bak
 *.tmp
+
+# Composer
+composer.phar

@@ -7,32 +7,30 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 
-$this->title = 'Login';
+$this->title = '用户登录';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="site-login">
+<div class="site-login" style="text-align: center;">
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>Please fill out the following fields to login:</p>
+    <p>请填写以下信息进行登录：</p>
 
     <div class="row">
-        <div class="col-lg-5">
+        <div class="col-lg-4 col-lg-offset-4">
             <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
 
-                <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
+                <?= $form->field($model, 'username')->textInput(['autofocus' => true, 'placeholder' => '请输入用户名'])->label('用户名') ?>
 
-                <?= $form->field($model, 'password')->passwordInput() ?>
+                <?= $form->field($model, 'password')->passwordInput(['placeholder' => '请输入密码'])->label('密码') ?>
 
-                <?= $form->field($model, 'rememberMe')->checkbox() ?>
-
-                <div style="color:#999;margin:1em 0">
-                    If you forgot your password you can <?= Html::a('reset it', ['site/request-password-reset']) ?>.
-                    <br>
-                    Need new verification email? <?= Html::a('Resend', ['site/resend-verification-email']) ?>
-                </div>
+                <?= $form->field($model, 'rememberMe')->checkbox()->label('记住我') ?>
 
                 <div class="form-group">
-                    <?= Html::submitButton('Login', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
+                    <?= Html::submitButton('登录', ['class' => 'btn btn-primary btn-block', 'name' => 'login-button']) ?>
+                </div>
+
+                <div style="color:#999;margin:1em 0; border-top: 1px solid #eee; padding-top: 15px;">
+                    如果没有账号，请先 <?= Html::a('注册新账号', ['site/signup']) ?>
                 </div>
 
             <?php ActiveForm::end(); ?>

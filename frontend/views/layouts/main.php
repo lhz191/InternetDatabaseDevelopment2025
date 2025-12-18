@@ -101,6 +101,51 @@ AppAsset::register($this);
             color: #FFD700;
             border: 1px solid rgba(255,215,0,0.3);
         }
+
+        /* 用户下拉菜单 */
+        .dropdown-user {
+            position: relative;
+        }
+
+        .user-dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            min-width: 150px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            border-radius: 4px;
+            padding: 8px 0;
+            margin-top: 5px;
+            z-index: 1001;
+        }
+
+        .dropdown-user:hover .user-dropdown {
+            display: block;
+        }
+
+        .logout-btn {
+            background: none;
+            border: none;
+            width: 100%;
+            text-align: left;
+            padding: 8px 15px;
+            color: #333;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .logout-btn:hover {
+            background-color: #f5f5f5;
+            color: #8B0000;
+        }
+
+        .logout-btn i {
+            margin-right: 8px;
+            width: 16px;
+        }
         
         /* 主内容区 */
         .main-content {
@@ -471,6 +516,24 @@ AppAsset::register($this);
             <li><a href="<?= Url::to(['/team/index']) ?>">团队展示</a></li>
             <li><a href="<?= Url::to(['/guestbook/index']) ?>">留言板</a></li>
             <li><a href="<?= Url::to(['/site/about']) ?>" class="<?= Yii::$app->controller->action->id == 'about' ? 'active' : '' ?>">关于我们</a></li>
+            
+            <?php if (Yii::$app->user->isGuest): ?>
+                <li><a href="<?= Url::to(['/site/login']) ?>">登录/注册</a></li>
+            <?php else: ?>
+                <li class="dropdown-user">
+                    <a href="javascript:void(0)" class="user-toggle">
+                        <i class="fas fa-user-circle"></i> <?= Html::encode(Yii::$app->user->identity->username) ?>
+                    </a>
+                    <div class="user-dropdown">
+                        <?= Html::beginForm(['/site/logout'], 'post') ?>
+                        <?= Html::submitButton(
+                            '<i class="fas fa-sign-out-alt"></i> 退出登录',
+                            ['class' => 'logout-btn']
+                        ) ?>
+                        <?= Html::endForm() ?>
+                    </div>
+                </li>
+            <?php endif; ?>
         </ul>
     </div>
 </nav>
