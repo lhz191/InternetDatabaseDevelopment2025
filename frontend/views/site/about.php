@@ -219,22 +219,22 @@ $this->title = '关于我们';
                     <div class="member-id">学号: XXXXXXX</div>
                 </div>
                 <div class="team-member">
-                    <div class="member-avatar">B</div>
-                    <div class="member-name">组员B</div>
-                    <div class="member-role">分类管理</div>
-                    <div class="member-id">学号: XXXXXXX</div>
+                    <div class="member-avatar" style="background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);">刘</div>
+                    <div class="member-name">刘浩泽</div>
+                    <div class="member-role">首页 + 文章管理</div>
+                    <div class="member-id">学号: 2212478</div>
                 </div>
                 <div class="team-member">
                     <div class="member-avatar">C</div>
                     <div class="member-name">组员C</div>
-                    <div class="member-role">文章管理</div>
+                    <div class="member-role">分类管理</div>
                     <div class="member-id">学号: XXXXXXX</div>
                 </div>
                 <div class="team-member">
-                    <div class="member-avatar" style="background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);">刘</div>
-                    <div class="member-name">刘浩泽</div>
+                    <div class="member-avatar">D</div>
+                    <div class="member-name">组员D</div>
                     <div class="member-role">评论管理</div>
-                    <div class="member-id">学号: 2212478</div>
+                    <div class="member-id">学号: XXXXXXX</div>
                 </div>
             </div>
         </div>

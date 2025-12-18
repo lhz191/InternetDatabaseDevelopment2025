@@ -238,10 +238,6 @@ $headerImage = 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1
     .comment-submit-btn:hover {
         transform: translateY(-2px);
         box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
-        align-items: center;
-        margin-bottom: 24px;
-        padding-bottom: 16px;
-        border-bottom: 1px solid #eee;
     }
     
     .comments-title {
