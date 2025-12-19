@@ -87,7 +87,7 @@ class PreNewsComment extends ActiveRecord
      */
     public function getUser()
     {
-        return $this->hasOne(PreSysUser::class, ['uid' => 'uid']);
+        return $this->hasOne(\common\models\User::class, ['id' => 'uid']);
     }
 
     /**
