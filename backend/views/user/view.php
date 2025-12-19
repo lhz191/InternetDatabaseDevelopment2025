@@ -17,8 +17,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('编辑', ['update', 'uid' => $model->uid], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('删除', ['delete', 'uid' => $model->uid], [
+        <?= Html::a('编辑', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('删除', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => '确定要删除这个用户吗？',
@@ -30,10 +30,10 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'uid',
+            'id',
             'username',
             'email:email',
-            'phone',
+            //'phone',
             [
                 'attribute' => 'role',
                 'value' => $model->getRoleText(),

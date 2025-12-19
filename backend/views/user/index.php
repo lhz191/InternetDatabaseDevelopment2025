@@ -23,20 +23,14 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            'uid',
+            'id',
             'username',
             'email:email',
-            'phone',
-            [
-                'attribute' => 'role',
-                'value' => function($model) {
-                    return $model->getRoleText();
-                },
-            ],
+            //'phone',
             [
                 'attribute' => 'status',
                 'value' => function($model) {
-                    return $model->getStatusText();
+                    return $model->status == 10 ? '正常' : '禁用';
                 },
             ],
             'created_at',
@@ -44,7 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{view} {update} {delete}',
                 'urlCreator' => function ($action, $model, $key, $index) {
-                    return [$action, 'uid' => $model->uid];
+                    return [$action, 'id' => $model->id];
                 },
             ],
         ],
