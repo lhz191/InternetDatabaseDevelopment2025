@@ -82,7 +82,7 @@ $headerGradient = 'linear-gradient(135deg, #8B0000 0%, #4a0000 50%, #2d0000 100%
     
     .article-container {
         max-width: 800px;
-        margin: -60px auto 0;
+        margin: 20px auto 0;
         padding: 0 20px 60px;
         position: relative;
         z-index: 2;
