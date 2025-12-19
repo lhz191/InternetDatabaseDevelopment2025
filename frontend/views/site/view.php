@@ -10,6 +10,8 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 
+$likedCommentIds = Yii::$app->session->get('liked_comments', []);
+
 $this->title = $article->title;
 
 // 抗战主题 - 使用渐变背景
@@ -425,6 +427,33 @@ $headerGradient = 'linear-gradient(135deg, #8B0000 0%, #4a0000 50%, #2d0000 100%
         color: #999;
     }
     
+    /* 嵌套评论样式 */
+.comment-children {
+    margin-left: 48px;       /* 左侧缩进 */
+    margin-top: 16px;
+    padding-left: 16px;      /* 内容内边距 */
+    border-left: 3px solid #f0f0f0; /* 左侧灰色竖线，增加层次感 */
+    background-color: #fafafa; /* 微弱的背景色区分 */
+    border-radius: 0 8px 8px 0;
+}
+
+/* 调整子评论的内边距，使其紧凑一点 */
+.comment-children .comment-item {
+    padding: 16px 0;
+    border-bottom: 1px dashed #eee; /* 子评论之间用虚线分割 */
+}
+
+.comment-children .comment-item:last-child {
+    border-bottom: none;
+}
+
+/* 回复目标的样式 (@xxx) */
+.reply-target {
+    color: #8B0000;
+    font-weight: 500;
+    margin-right: 6px;
+}
+
     @media (max-width: 768px) {
         .article-title { font-size: 26px; }
         .article-body { padding: 24px; }
@@ -474,66 +503,110 @@ $headerGradient = 'linear-gradient(135deg, #8B0000 0%, #4a0000 50%, #2d0000 100%
     
     <!-- 评论区 -->
     <div class="comments-section">
-        <div class="comments-header">
-            <h3 class="comments-title">
-                <i class="fas fa-comments"></i> 评论
-                <span class="comments-count"><?= count($comments) ?></span>
-            </h3>
+    <div class="comments-header">
+        <h3 class="comments-title">
+            <i class="fas fa-comments"></i> 评论
+            <span class="comments-count"><?= count($comments) ?></span>
+        </h3>
+    </div>
+    
+    <div class="comment-form-wrap">
+        <div class="comment-form-avatar">
+            <i class="fas fa-user"></i>
         </div>
-        
-        <!-- 发表评论 -->
-        <div class="comment-form-wrap">
-            <div class="comment-form-avatar">
-                <i class="fas fa-user"></i>
-            </div>
-            <div class="comment-form-box">
-                <textarea class="comment-input" id="commentInput" placeholder="说说你的看法..." rows="3"></textarea>
-                <div class="comment-form-footer">
-                    <span class="comment-tip">请文明发言，理性讨论</span>
-                    <button class="comment-submit-btn" onclick="submitComment()">
-                        <i class="fas fa-paper-plane"></i> 发表评论
-                    </button>
-                </div>
+        <div class="comment-form-box">
+            <input type="hidden" id="replyParentId" value="">
+            <textarea class="comment-input" id="commentInput" placeholder="说说你的看法..." rows="3"></textarea>
+            <div class="comment-form-footer">
+                <span class="comment-tip">请文明发言，理性讨论</span>
+                <button class="comment-submit-btn" onclick="submitComment()">
+                    <i class="fas fa-paper-plane"></i> 发表评论
+                </button>
             </div>
         </div>
+    </div>
+    
+    <?php if (!empty($comments)): ?>
+        <?php 
+        // === 1. 数据预处理：将扁平数组转换为以 parent_id 为键的树形结构 ===
+        $commentTree = [];
+        // 获取 session 中的点赞记录，避免在递归中重复读取
+        $likedCommentIds = Yii::$app->session->get('liked_comments', []);
         
-        <?php if (!empty($comments)): ?>
-            <?php foreach ($comments as $comment): ?>
-                <div class="comment-item">
+        foreach ($comments as $item) {
+            $pid = $item->parent_id ? $item->parent_id : 0; // 0 代表顶级评论
+            $commentTree[$pid][] = $item;
+        }
+
+        // === 2. 定义递归渲染函数 ===
+        // 使用 Closure (闭包) 来实现模板内的递归
+        $renderComments = function($parentId) use (&$renderComments, $commentTree, $likedCommentIds) {
+            if (!isset($commentTree[$parentId])) return;
+            
+            foreach ($commentTree[$parentId] as $comment) {
+                // 计算点赞状态
+                $isLiked = in_array($comment->id, $likedCommentIds);
+                $heartClass = $isLiked ? 'fas' : 'far';
+                $heartStyle = $isLiked ? 'color: #8B0000;' : '';
+                ?>
+                
+                <div class="comment-item" id="comment-<?= $comment->id ?>">
                     <div class="comment-header">
                         <div class="comment-avatar">
                             <?= $comment->user ? mb_substr($comment->user->username, 0, 1) : '?' ?>
                         </div>
                         <div class="comment-user-info">
                             <div class="comment-username">
-                                <?= $comment->user ? Html::encode($comment->user->username) : '匿名用户' ?>
+                                <?= $comment->user ? \yii\helpers\Html::encode($comment->user->username) : '匿名用户' ?>
                             </div>
                             <div class="comment-time">
                                 <?= date('Y-m-d H:i', strtotime($comment->created_at)) ?>
                             </div>
                         </div>
                     </div>
+                    
                     <div class="comment-content">
-                        <?= Html::encode($comment->content) ?>
+                        <?php if($comment->parent_id && $comment->parent): ?>
+                            <span class="reply-target">@<?= \yii\helpers\Html::encode($comment->parent->user->username ?? '匿名') ?></span>
+                        <?php endif; ?>
+                        
+                        <?= \yii\helpers\Html::encode($comment->content) ?>
                     </div>
+                    
                     <div class="comment-actions">
-                        <span class="comment-action">
-                            <i class="far fa-heart"></i> <?= $comment->likes ?> 点赞
+                        <span class="comment-action" onclick="likeComment(<?= $comment->id ?>)">
+                            <i class="<?= $heartClass ?> fa-heart" id="comment-like-icon-<?= $comment->id ?>" style="<?= $heartStyle ?>"></i> 
+                            <span id="comment-like-count-<?= $comment->id ?>"><?= $comment->likes ?></span> 点赞
                         </span>
-                        <span class="comment-action">
+                        <span class="comment-action" onclick="replyTo(<?= $comment->id ?>, '<?= $comment->user ? \yii\helpers\Html::encode($comment->user->username) : '匿名' ?>')">
                             <i class="far fa-comment"></i> 回复
                         </span>
                     </div>
+
+                    <?php if (isset($commentTree[$comment->id])): ?>
+                        <div class="comment-children">
+                            <?php $renderComments($comment->id); // 递归调用自己 ?>
+                        </div>
+                    <?php endif; ?>
                 </div>
-            <?php endforeach; ?>
-        <?php else: ?>
-            <div class="no-comments">
-                <i class="far fa-comments"></i>
-                <p>暂无评论，快来发表第一条评论吧！</p>
-            </div>
-        <?php endif; ?>
-    </div>
-    
+                
+                <?php
+            }
+        };
+
+        // === 4. 开始渲染顶级评论 (parent_id = 0) ===
+        $renderComments(0); 
+        ?>
+        
+    <?php else: ?>
+        <div class="no-comments">
+            <i class="far fa-comments"></i>
+            <p>暂无评论，快来发表第一条评论吧！</p>
+        </div>
+    <?php endif; ?>
+</div>
+        
+        
     <!-- 相关文章 -->
     <?php if (!empty($relatedArticles)): ?>
         <div class="related-section">
@@ -852,21 +925,25 @@ function copyLink() {
 // 提交评论（UI演示，实际提交由评论模块实现）
 function submitComment() {
     var content = document.getElementById('commentInput').value.trim();
-    
+    // 获取父评论ID
+    var parentId = document.getElementById('replyParentId').value; 
+
     if (!content) {
         alert('请输入评论内容');
         return;
     }
     
-    // 获取 CSRF Token (Yii2 安全机制必须)
     var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     
-    // 构建提交数据
     var formData = new FormData();
-    formData.append('article_id', <?= $article->aid ?>); // 注入文章ID
+    formData.append('article_id', <?= $article->aid ?>);
     formData.append('content', content);
+    
+    // 如果有父ID，追加到提交数据中
+    if (parentId) {
+        formData.append('parent_id', parentId);
+    }
 
-    // 发送请求 (假设后端路由为 site/comment)
     fetch('<?= Url::to(['site/comment']) ?>', {
         method: 'POST',
         headers: {
@@ -878,9 +955,11 @@ function submitComment() {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            alert('评论发表成功！');
-            document.getElementById('commentInput').value = ''; // 清空输入框
-            location.reload(); // 简单处理：刷新页面显示新评论
+            alert('评论成功！');
+            // 清空
+            document.getElementById('commentInput').value = ''; 
+            document.getElementById('replyParentId').value = ''; 
+            location.reload(); 
         } else {
             alert(data.message || '评论失败');
         }
@@ -889,5 +968,51 @@ function submitComment() {
         console.error('Error:', error);
         alert('网络错误，请稍后重试');
     });
+}
+// === 1. 新增：评论点赞功能 ===
+function likeComment(cid) {
+    // 简单的视觉防抖：如果已经变红(fas)，就不再请求
+    var icon = document.getElementById('comment-like-icon-' + cid);
+    if (icon.classList.contains('fas')) return; 
+
+    // 获取 CSRF Token
+    var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    
+    // 发送请求
+    // 注意：这里用了 GET 请求方便处理，如果你的 actionLikeComment 限定了 POST，请改用 POST
+    fetch('index.php?r=site/like-comment&id=' + cid, {
+        method: 'GET', 
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRF-Token': csrfToken
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // 更新数字
+            document.getElementById('comment-like-count-' + cid).textContent = data.likes;
+            // 图标变红实心
+            icon.classList.remove('far');
+            icon.classList.add('fas');
+            icon.style.color = '#8B0000';
+        } else {
+            alert(data.message);
+        }
+    });
+}
+
+// === 2. 新增：点击“回复”按钮的处理 ===
+function replyTo(parentId, username) {
+    // 设置隐藏域的值
+    document.getElementById('replyParentId').value = parentId;
+    
+    // 改变输入框提示，让用户知道在回复谁
+    var input = document.getElementById('commentInput');
+    input.placeholder = "回复 " + username + "：";
+    
+    // 滚动到输入框并聚焦
+    input.focus();
+    input.scrollIntoView({behavior: "smooth", block: "center"});
 }
 </script>
