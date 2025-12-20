@@ -82,3 +82,4 @@ INSERT INTO `pre_category_stats` (`cid`, `article_count`, `view_count`, `like_co
 (7, 52, 28000, 1900),
 (8, 67, 36000, 2500);
 
+
