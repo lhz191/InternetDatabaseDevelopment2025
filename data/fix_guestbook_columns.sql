@@ -14,3 +14,4 @@ UPDATE `pre_guestbook` SET `nickname` = `name` WHERE `nickname` IS NULL AND `nam
 -- 如果有 status 列，将数据迁移到 is_read
 UPDATE `pre_guestbook` SET `is_read` = `status` WHERE `is_read` = 0 AND `status` IS NOT NULL;
 
+
