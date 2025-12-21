@@ -4,6 +4,9 @@
 \input{style/scala.tex}
 \graphicspath{ {images/} }
 \usepackage{ctex}
+\setCJKmainfont{SimSun}[AutoFakeBold=2.5, AutoFakeSlant=0.3]
+\setCJKsansfont{SimHei}[AutoFakeBold=2.5]
+\setCJKmonofont{FangSong}
 \usepackage{graphicx}
 \usepackage{color,framed}
 \usepackage{listings}
@@ -53,10 +56,10 @@
     \begin{tabular}{ll}
         \textsc{\LARGE \kaishu{项目名称\ :\ 抗战胜利80周年纪念网站}} \\[0.3cm]
         \textsc{\LARGE \kaishu{团队名称\ :\ 抗战纪念开发组}} \\[0.5cm]
-        \textsc{\LARGE \kaishu{组长\ :\ 彭浩然\ (学号：2313314)}} \\[0.3cm]
+        \textsc{\LARGE \kaishu{组长\ :\ 童汉鑫\ (学号：2311995)}} \\[0.3cm]
         \textsc{\LARGE \kaishu{组员\ :\ 刘浩泽\ (学号：2212478)}} \\[0.3cm]
+        \textsc{\LARGE \kaishu{组员\ :\ 彭浩然\ (学号：2313314)}} \\[0.3cm]
         \textsc{\LARGE \kaishu{组员\ :\ 董珺\ (学号：2212880)}} \\[0.3cm]
-        \textsc{\LARGE \kaishu{组员\ :\ 童汉鑫\ (学号：2311995)}} \\[0.3cm]
     \end{tabular}
     \vfill
     {\Large \today}
@@ -1067,12 +1070,14 @@ Yii2框架不熟悉 & 开发进度延迟 & 提前学习官方文档，参考示�
 \begin{tabularx}{\textwidth}{|l|l|l|X|}
 \hline
 \textbf{姓名} & \textbf{学号} & \textbf{角色} & \textbf{负责模块} \\ \hline
-彭浩然 & 2313314 & 组长 & 登录注册、留言、实现文档、用户手册 \\ \hline
+童汉鑫 & 2311995 & 组长 & 评论管理、团队展示、成员管理、部署文档 \\ \hline
 刘浩泽 & 2212478 & 组员 & 首页、文章管理、分类管理、爬虫、需求文档、设计文档 \\ \hline
+彭浩然 & 2313314 & 组员 & 登录注册、留言、实现文档、用户手册 \\ \hline
 董珺 & 2212880 & 组员 & 留言板、团队展示 \\ \hline
-童汉鑫 & 2311995 & 组员 & 评论管理、团队展示、成员管理、部署文档 \\ \hline
 \end{tabularx}
 \end{table}
+
+\textbf{GitHub 仓库}：\url{https://github.com/lhz191/InternetDatabaseDevelopment2025}
 
 \subsection{详细分工}
 \begin{table}[H]
@@ -1081,16 +1086,14 @@ Yii2框架不熟悉 & 开发进度延迟 & 提前学习官方文档，参考示�
 \begin{tabularx}{\textwidth}{|l|X|l|}
 \hline
 \textbf{成员} & \textbf{负责内容} & \textbf{工作量占比} \\ \hline
-彭浩然 & 
+童汉鑫 & 
 \begin{itemize}
-    \item 用户注册、登录、注销功能
-    \item 后台用户管理（CRUD）
-    \item 权限控制
-    \item 前台留言功能
-    \item 实现文档编写
-    \item 用户手册编写
-    \item 项目协调与进度管理
-\end{itemize} & 25\% \\ \hline
+    \item 前台评论功能
+    \item 后台评论审核与管理
+    \item 文章详情页优化
+    \item 团队展示页面优化
+    \item 部署文档编写
+\end{itemize} & 20\% \\ \hline
 刘浩泽 & 
 \begin{itemize}
     \item 前台首页设计与实现
@@ -1103,20 +1106,21 @@ Yii2框架不熟悉 & 开发进度延迟 & 提前学习官方文档，参考示�
     \item 需求文档编写
     \item 设计文档编写
 \end{itemize} & 35\% \\ \hline
+彭浩然 & 
+\begin{itemize}
+    \item 用户注册、登录、注销功能
+    \item 后台用户管理（CRUD）
+    \item 权限控制
+    \item 前台留言功能
+    \item 实现文档编写
+    \item 用户手册编写
+\end{itemize} & 25\% \\ \hline
 董珺 & 
 \begin{itemize}
     \item 前台留言板功能
     \item 后台留言管理
     \item 前台团队展示页面
     \item 后台团队成员管理
-\end{itemize} & 20\% \\ \hline
-童汉鑫 & 
-\begin{itemize}
-    \item 前台评论功能
-    \item 后台评论审核与管理
-    \item 文章详情页优化
-    \item 团队展示页面优化
-    \item 部署文档编写
 \end{itemize} & 20\% \\ \hline
 \end{tabularx}
 \end{table}
