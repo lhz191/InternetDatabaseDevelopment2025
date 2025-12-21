@@ -1,0 +1,1165 @@
+\documentclass[a4paper]{article}
+
+\input{style/ch_xelatex.tex}
+\input{style/scala.tex}
+\graphicspath{ {images/} }
+\usepackage{ctex}
+\setCJKmainfont{SimSun}[AutoFakeBold=2.5, AutoFakeSlant=0.3]
+\setCJKsansfont{SimHei}[AutoFakeBold=2.5]
+\setCJKmonofont{FangSong}
+\usepackage{graphicx}
+\usepackage{color,framed}
+\usepackage{listings}
+\usepackage{caption}
+\usepackage{amssymb}
+\usepackage{enumerate}
+\usepackage{xcolor}
+\usepackage{bm} 
+\usepackage{lastpage}
+\usepackage{fancyhdr}
+\usepackage{tabularx}  
+\usepackage{geometry}
+\usepackage{float}
+\usepackage{multirow}
+\usepackage{booktabs}
+
+\geometry{a4paper,left=2.3cm,right=2.3cm,top=2.7cm,bottom=2.7cm}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\lhead{\kaishu \leftmark}
+\rhead{\kaishu 互联网数据库作业报告}
+\lfoot{}
+\cfoot{\thepage}
+\rfoot{}
+\renewcommand{\headrulewidth}{0.1pt}  
+\renewcommand{\footrulewidth}{0pt}
+\setlength{\textfloatsep}{10mm}
+
+\begin{document}
+\renewcommand{\contentsname}{目\ 录}
+\renewcommand{\figurename}{图}
+\renewcommand{\tablename}{表}
+\renewcommand{\today}{\number\year 年 \number\month 月 \number\day 日}
+
+%-------------------------封面----------------
+\begin{titlepage}
+    \begin{center}
+    \includegraphics[width=0.8\textwidth]{NKU.png}\\[1cm]
+    \vspace{20mm}
+		\textbf{\huge\textbf{\kaishu{计算机学院}}}\\[0.5cm]
+		\textbf{\huge{\kaishu{互联网数据库开发}}}\\[2.3cm]
+		\textbf{\Huge\textbf{\kaishu{团队作业1——需求文档}}}
+		\vspace{\fill}
+    
+    \centering
+    \begin{tabular}{ll}
+        \textsc{\LARGE \kaishu{项目名称\ :\ 抗战胜利80周年纪念网站}} \\[0.3cm]
+        \textsc{\LARGE \kaishu{团队名称\ :\ 抗战纪念开发组}} \\[0.5cm]
+        \textsc{\LARGE \kaishu{组长\ :\ 童汉鑫\ (学号：2311995)}} \\[0.3cm]
+        \textsc{\LARGE \kaishu{组员\ :\ 刘浩泽\ (学号：2212478)}} \\[0.3cm]
+        \textsc{\LARGE \kaishu{组员\ :\ 彭浩然\ (学号：2313314)}} \\[0.3cm]
+        \textsc{\LARGE \kaishu{组员\ :\ 董珺\ (学号：2212880)}} \\[0.3cm]
+    \end{tabular}
+    \vfill
+    {\Large \today}
+    \end{center}
+\end{titlepage}
+
+\renewcommand {\thefigure}{\thesection{}.\arabic{figure}}
+\renewcommand{\figurename}{图}
+\renewcommand{\contentsname}{目录}  
+\cfoot{\thepage\ of \pageref{LastPage}}
+
+\clearpage
+\tableofcontents
+\newpage
+
+%--------------------------正文内容--------------------------------
+
+\section{项目概述}
+
+\subsection{项目背景}
+2025年是中国人民抗日战争暨世界反法西斯战争胜利80周年。为铭记历史、缅怀先烈、珍爱和平、开创未来，本项目旨在开发一个集历史展示、信息管理、互动交流于一体的综合性纪念网站。
+
+该网站通过互联网数据库技术，系统化地展示抗战历史资料、英雄人物事迹、重大战役介绍、历史遗址信息等内容，为广大用户提供一个学习历史、表达敬意、交流感想的网络平台。
+
+\subsection{项目目标}
+\begin{enumerate}
+    \item \textbf{历史传承}：系统化展示抗战历史资料，让更多人了解这段历史
+    \item \textbf{信息管理}：建立完善的后台管理系统，实现内容的动态维护
+    \item \textbf{用户互动}：提供评论、留言、点赞等功能，增强用户参与感
+    \item \textbf{数据可视化}：通过图表展示访问统计、内容分布等数据
+    \item \textbf{响应式设计}：适配多种设备，提供良好的用户体验
+\end{enumerate}
+
+\subsection{技术选型}
+\begin{itemize}
+    \item \textbf{开发框架}：Yii2 Advanced Template
+    \item \textbf{数据库}：MySQL 5.7+
+    \item \textbf{前端技术}：HTML5 + CSS3 + JavaScript + Bootstrap
+    \item \textbf{图表库}：ECharts
+    \item \textbf{开发环境}：XAMPP (Apache + PHP 8.2 + MySQL)
+    \item \textbf{版本控制}：Git + GitHub
+\end{itemize}
+
+\section{用户需求分析}
+
+\subsection{用户角色定义}
+本系统共设计三类用户角色，每类角色具有不同的权限和功能需求：
+
+\subsubsection{普通访客（游客）}
+\begin{itemize}
+    \item 无需注册即可访问网站
+    \item 可浏览所有公开的历史资料、文章内容
+    \item 可查看抗战历史时间线、英雄人物介绍
+    \item 可在留言板发表留言（需填写昵称和邮箱）
+    \item 无法进行点赞、评论等需要登录的操作
+\end{itemize}
+
+\subsubsection{注册用户}
+\begin{itemize}
+    \item 需要注册账号并登录
+    \item 拥有普通访客的所有权限
+    \item 可对文章进行点赞操作
+    \item 可发表评论并与其他用户互动
+    \item 可收藏感兴趣的文章内容
+    \item 可查看个人浏览历史记录
+\end{itemize}
+
+\subsubsection{管理员}
+\begin{itemize}
+    \item 具有最高权限，可访问后台管理系统
+    \item 可管理所有文章内容（增删改查）
+    \item 可管理文章分类和标签
+    \item 可管理用户账号（查看、禁用、删除）
+    \item 可审核和管理用户评论
+    \item 可查看和管理留言板内容
+    \item 可查看网站统计数据和访问日志
+    \item 可管理团队成员信息
+\end{itemize}
+
+\subsection{功能需求清单}
+
+\subsubsection{前台功能需求}
+
+\paragraph{首页模块}
+\begin{enumerate}
+    \item \textbf{Hero横幅展示}
+    \begin{itemize}
+        \item 显示主题标语："铭记历史 珍爱和平"
+        \item 显示纪念副标题："纪念中国人民抗日战争暨世界反法西斯战争胜利80周年"
+        \item 显示年份标识：1945-2025
+    \end{itemize}
+    
+    \item \textbf{分类导航}
+    \begin{itemize}
+        \item 显示所有文章分类（重大战役、英雄人物、历史遗址等）
+        \item 支持点击分类快速筛选对应内容
+        \item 高亮显示当前选中的分类
+    \end{itemize}
+    
+    \item \textbf{热门专题展示}
+    \begin{itemize}
+        \item 按点赞数或浏览量排序展示热门文章
+        \item 每篇文章显示：标题、摘要、分类、作者、浏览量、点赞数
+        \item 卡片式布局，配有相关主题图片
+    \end{itemize}
+    
+    \item \textbf{最新发布展示}
+    \begin{itemize}
+        \item 按发布时间倒序展示最新文章
+        \item 展示方式同热门专题
+    \end{itemize}
+    
+    \item \textbf{抗战历史时间线}
+    \begin{itemize}
+        \item 时间轴形式展示重要历史事件
+        \item 包含事件：九一八事变、七七事变、南京大屠杀、台儿庄大捷、百团大战、抗战胜利
+        \item 每个事件显示日期、标题和简要说明
+    \end{itemize}
+    
+    \item \textbf{数据统计图表}
+    \begin{itemize}
+        \item 近30天访问趋势折线图（使用ECharts）
+        \item 分类内容分布饼图
+        \item 图表支持交互式查看详细数据
+    \end{itemize}
+\end{enumerate}
+
+\paragraph{文章列表模块}
+\begin{enumerate}
+    \item \textbf{文章筛选功能}
+    \begin{itemize}
+        \item 按分类筛选（重大战役、英雄人物、历史遗址等8个分类）
+        \item 按关键词搜索文章标题和内容
+        \item 筛选条件可组合使用
+    \end{itemize}
+    
+    \item \textbf{文章排序功能}
+    \begin{itemize}
+        \item 按发布时间排序（最新优先）
+        \item 按浏览量排序（最热门优先）
+        \item 按点赞数排序（最受欢迎优先）
+    \end{itemize}
+    
+    \item \textbf{文章列表展示}
+    \begin{itemize}
+        \item 网格卡片式布局
+        \item 每个卡片显示：封面图、标题、摘要、分类、浏览量、点赞数
+        \item 支持分页，每页显示12篇文章
+        \item 点击卡片跳转到文章详情页
+    \end{itemize}
+\end{enumerate}
+
+\paragraph{文章详情模块}
+\begin{enumerate}
+    \item \textbf{文章内容展示}
+    \begin{itemize}
+        \item 显示文章标题、发布时间、作者、分类
+        \item 显示浏览量、点赞数统计
+        \item 完整显示文章正文内容
+        \item 支持富文本格式（标题、段落、列表等）
+    \end{itemize}
+    
+    \item \textbf{阅读进度条}
+    \begin{itemize}
+        \item 页面顶部显示阅读进度
+        \item 随滚动实时更新进度百分比
+        \item 提升用户阅读体验
+    \end{itemize}
+    
+    \item \textbf{浮动工具栏}
+    \begin{itemize}
+        \item 页面右侧固定位置显示
+        \item 点赞按钮：点击后增加点赞数，同一会话只能点赞一次
+        \item 分享按钮：打开分享弹窗，支持分享到微博或复制链接
+        \item 返回顶部按钮：快速滚动到页面顶部
+    \end{itemize}
+    
+    \item \textbf{相关文章推荐}
+    \begin{itemize}
+        \item 根据当前文章分类推荐同类文章
+        \item 显示3-4篇相关文章
+        \item 展示文章标题和摘要
+    \end{itemize}
+    
+    \item \textbf{评论系统}
+    \begin{itemize}
+        \item 显示所有用户评论，按时间倒序
+        \item 每条评论显示：用户昵称、发布时间、评论内容
+        \item 注册用户可发表评论
+        \item 支持评论的审核和删除（管理员权限）
+    \end{itemize}
+\end{enumerate}
+
+\paragraph{团队展示模块}
+\begin{enumerate}
+    \item \textbf{团队信息}
+    \begin{itemize}
+        \item 显示团队名称、简介
+        \item 显示项目开发背景和目标
+    \end{itemize}
+    
+    \item \textbf{成员展示}
+    \begin{itemize}
+        \item 卡片式展示每位成员
+        \item 显示成员姓名、角色、负责模块
+        \item 显示成员照片或头像
+        \item 显示成员邮箱（可选）
+    \end{itemize}
+    
+    \item \textbf{分工说明}
+    \begin{itemize}
+        \item 表格形式展示详细分工
+        \item 包含：成员姓名、学号、负责模块、工作量
+    \end{itemize}
+\end{enumerate}
+
+\paragraph{留言板模块}
+\begin{enumerate}
+    \item \textbf{留言发布}
+    \begin{itemize}
+        \item 游客无需登录即可留言
+        \item 必填项：昵称、留言内容
+        \item 选填项：邮箱
+        \item 支持富文本输入
+        \item 留言提交后显示成功提示
+    \end{itemize}
+    
+    \item \textbf{留言展示}
+    \begin{itemize}
+        \item 列表形式展示所有留言
+        \item 显示留言者昵称、留言时间、留言内容
+        \item 按时间倒序排列
+        \item 支持分页显示
+    \end{itemize}
+\end{enumerate}
+
+\paragraph{用户认证模块}
+\begin{enumerate}
+    \item \textbf{用户注册}
+    \begin{itemize}
+        \item 必填项：用户名、密码、确认密码、邮箱
+        \item 用户名需唯一，长度4-20个字符
+        \item 密码强度验证（至少6位）
+        \item 邮箱格式验证
+        \item 注册成功后自动登录
+    \end{itemize}
+    
+    \item \textbf{用户登录}
+    \begin{itemize}
+        \item 支持用户名或邮箱登录
+        \item 记住登录状态（可选）
+        \item 登录失败提示错误信息
+        \item 登录成功跳转到之前访问的页面
+    \end{itemize}
+    
+    \item \textbf{用户注销}
+    \begin{itemize}
+        \item 退出当前登录状态
+        \item 清除session信息
+        \item 跳转到首页
+    \end{itemize}
+\end{enumerate}
+
+\subsubsection{后台功能需求}
+
+\paragraph{文章管理模块}
+\begin{enumerate}
+    \item \textbf{文章列表}
+    \begin{itemize}
+        \item 表格形式展示所有文章
+        \item 显示字段：ID、标题、分类、状态、浏览量、点赞数、发布时间
+        \item 支持关键词搜索（标题）
+        \item 支持分类筛选
+        \item 支持状态筛选（已发布、草稿、已下架）
+        \item 支持排序（按时间、浏览量、点赞数）
+        \item 支持分页（每页10条）
+    \end{itemize}
+    
+    \item \textbf{文章新增}
+    \begin{itemize}
+        \item 填写文章标题（必填）
+        \item 选择文章分类（必填）
+        \item 填写文章摘要（选填）
+        \item 编辑文章正文（必填，支持富文本）
+        \item 填写文章来源（选填）
+        \item 填写作者（选填）
+        \item 选择文章状态（已发布/草稿/已下架）
+        \item 设置是否置顶
+        \item 设置是否热门
+        \item 保存后返回文章列表
+    \end{itemize}
+    
+    \item \textbf{文章编辑}
+    \begin{itemize}
+        \item 加载现有文章数据
+        \item 可修改所有文章字段
+        \item 保存后更新数据库
+        \item 记录修改时间
+    \end{itemize}
+    
+    \item \textbf{文章删除}
+    \begin{itemize}
+        \item 单篇文章删除
+        \item 批量删除功能
+        \item 删除前二次确认
+        \item 删除后无法恢复
+    \end{itemize}
+    
+    \item \textbf{批量操作}
+    \begin{itemize}
+        \item 批量设置置顶/取消置顶
+        \item 批量设置热门/取消热门
+        \item 批量删除文章
+        \item 支持多选功能
+    \end{itemize}
+    
+    \item \textbf{快捷操作}
+    \begin{itemize}
+        \item 单篇文章一键置顶/取消置顶
+        \item 单篇文章一键热门/取消热门
+        \item 快速查看文章详情
+    \end{itemize}
+\end{enumerate}
+
+\paragraph{分类管理模块}
+\begin{enumerate}
+    \item \textbf{分类列表}
+    \begin{itemize}
+        \item 表格展示所有分类
+        \item 显示字段：ID、分类名称、描述、排序、状态、创建时间
+        \item 支持搜索分类名称
+        \item 显示每个分类下的文章数量
+    \end{itemize}
+    
+    \item \textbf{分类新增}
+    \begin{itemize}
+        \item 填写分类名称（必填，唯一）
+        \item 填写分类描述（选填）
+        \item 设置排序顺序（数字，越小越靠前）
+        \item 设置分类状态（启用/禁用）
+    \end{itemize}
+    
+    \item \textbf{分类编辑}
+    \begin{itemize}
+        \item 修改分类信息
+        \item 更新修改时间
+    \end{itemize}
+    
+    \item \textbf{分类删除}
+    \begin{itemize}
+        \item 检查是否有文章使用该分类
+        \item 如有关联文章则禁止删除
+        \item 无关联文章可直接删除
+    \end{itemize}
+\end{enumerate}
+
+\paragraph{用户管理模块}
+\begin{enumerate}
+    \item \textbf{用户列表}
+    \begin{itemize}
+        \item 表格展示所有用户
+        \item 显示字段：用户ID、用户名、邮箱、角色、状态、注册时间
+        \item 支持按用户名搜索
+        \item 支持按角色筛选
+        \item 支持按状态筛选
+    \end{itemize}
+    
+    \item \textbf{用户新增}
+    \begin{itemize}
+        \item 填写用户名（必填，唯一）
+        \item 填写密码（必填）
+        \item 填写邮箱（必填，格式验证）
+        \item 填写手机号（选填）
+        \item 选择用户角色（普通用户/管理员）
+        \item 设置用户状态（正常/禁用）
+    \end{itemize}
+    
+    \item \textbf{用户编辑}
+    \begin{itemize}
+        \item 修改用户信息
+        \item 修改用户角色
+        \item 修改用户状态
+        \item 重置用户密码
+    \end{itemize}
+    
+    \item \textbf{用户删除}
+    \begin{itemize}
+        \item 检查用户是否有关联数据（文章、评论等）
+        \item 删除前二次确认
+        \item 删除用户及其关联数据
+    \end{itemize}
+\end{enumerate}
+
+\paragraph{评论管理模块}
+\begin{enumerate}
+    \item \textbf{评论列表}
+    \begin{itemize}
+        \item 表格展示所有评论
+        \item 显示字段：ID、文章标题、评论者、评论内容、状态、时间
+        \item 支持按文章筛选
+        \item 支持按状态筛选（待审核/已通过/已拒绝）
+        \item 支持搜索评论内容
+    \end{itemize}
+    
+    \item \textbf{评论审核}
+    \begin{itemize}
+        \item 查看评论详情
+        \item 通过评论（显示在前台）
+        \item 拒绝评论（不显示）
+        \item 批量审核功能
+    \end{itemize}
+    
+    \item \textbf{评论删除}
+    \begin{itemize}
+        \item 单条删除
+        \item 批量删除
+        \item 删除前确认
+    \end{itemize}
+\end{enumerate}
+
+\paragraph{留言管理模块}
+\begin{enumerate}
+    \item \textbf{留言列表}
+    \begin{itemize}
+        \item 表格展示所有留言
+        \item 显示字段：ID、留言者昵称、邮箱、留言内容、IP地址、是否已读、时间
+        \item 支持按已读/未读筛选
+        \item 支持搜索留言内容
+        \item 未读留言高亮显示
+    \end{itemize}
+    
+    \item \textbf{留言处理}
+    \begin{itemize}
+        \item 标记为已读
+        \item 批量标记已读
+        \item 查看留言详情
+        \item 回复留言（发送邮件）
+    \end{itemize}
+    
+    \item \textbf{留言删除}
+    \begin{itemize}
+        \item 单条删除
+        \item 批量删除
+        \item 删除前确认
+    \end{itemize}
+\end{enumerate}
+
+\paragraph{团队管理模块}
+\begin{enumerate}
+    \item \textbf{成员管理}
+    \begin{itemize}
+        \item 查看团队成员列表
+        \item 新增团队成员信息
+        \item 编辑成员信息（姓名、角色、邮箱、简介等）
+        \item 删除团队成员
+        \item 上传成员照片
+    \end{itemize}
+    
+    \item \textbf{部门管理}
+    \begin{itemize}
+        \item 管理团队部门信息
+        \item 设置部门名称和描述
+        \item 关联部门与成员
+    \end{itemize}
+\end{enumerate}
+
+\paragraph{统计分析模块}
+\begin{enumerate}
+    \item \textbf{数据概览}
+    \begin{itemize}
+        \item 显示文章总数、用户总数、评论总数、留言总数
+        \item 显示今日新增数据统计
+        \item 显示本周/本月数据趋势
+    \end{itemize}
+    
+    \item \textbf{访问统计}
+    \begin{itemize}
+        \item 折线图展示近30天访问趋势
+        \item 显示访问量、浏览量、独立访客数
+        \item 支持按日期范围筛选
+    \end{itemize}
+    
+    \item \textbf{内容统计}
+    \begin{itemize}
+        \item 饼图展示分类内容分布
+        \item 柱状图展示文章发布趋势
+        \item 排行榜（热门文章、活跃用户）
+    \end{itemize}
+\end{enumerate}
+
+\subsection{非功能性需求}
+
+\subsubsection{性能需求}
+\begin{enumerate}
+    \item \textbf{响应时间}
+    \begin{itemize}
+        \item 页面首次加载时间 < 3秒
+        \item 普通操作响应时间 < 1秒
+        \item 数据库查询响应时间 < 500ms
+    \end{itemize}
+    
+    \item \textbf{并发能力}
+    \begin{itemize}
+        \item 支持至少100个并发用户同时访问
+        \item 数据库连接池配置合理
+    \end{itemize}
+    
+    \item \textbf{数据量}
+    \begin{itemize}
+        \item 支持至少500篇文章
+        \item 支持至少1000条评论
+        \item 支持至少100个注册用户
+    \end{itemize}
+\end{enumerate}
+
+\subsubsection{安全需求}
+\begin{enumerate}
+    \item \textbf{用户认证}
+    \begin{itemize}
+        \item 密码加密存储（使用Yii2的security组件）
+        \item Session管理，防止会话劫持
+        \item 登录失败次数限制
+    \end{itemize}
+    
+    \item \textbf{权限控制}
+    \begin{itemize}
+        \item 严格的角色权限划分
+        \item 后台操作需要管理员权限
+        \item 防止越权访问
+    \end{itemize}
+    
+    \item \textbf{数据安全}
+    \begin{itemize}
+        \item SQL注入防护（使用参数化查询）
+        \item XSS攻击防护（输入过滤、输出转义）
+        \item CSRF攻击防护（使用CSRF Token）
+        \item 敏感信息加密存储
+    \end{itemize}
+    
+    \item \textbf{输入验证}
+    \begin{itemize}
+        \item 前端表单验证
+        \item 后端数据验证
+        \item 文件上传类型和大小限制
+    \end{itemize}
+\end{enumerate}
+
+\subsubsection{可用性需求}
+\begin{enumerate}
+    \item \textbf{界面设计}
+    \begin{itemize}
+        \item 符合抗战纪念主题的视觉风格（深红、金色配色）
+        \item 布局清晰，操作直观
+        \item 响应式设计，适配PC、平板、手机
+    \end{itemize}
+    
+    \item \textbf{用户体验}
+    \begin{itemize}
+        \item 操作反馈及时（成功/失败提示）
+        \item 错误提示友好明确
+        \item 表单验证提示清晰
+        \item 加载状态提示
+    \end{itemize}
+    
+    \item \textbf{浏览器兼容}
+    \begin{itemize}
+        \item 支持Chrome、Firefox、Edge等主流浏览器
+        \item 浏览器版本：最近两个主要版本
+    \end{itemize}
+\end{enumerate}
+
+\subsubsection{可维护性需求}
+\begin{enumerate}
+    \item \textbf{代码规范}
+    \begin{itemize}
+        \item 遵循PSR编码规范
+        \item 统一的命名规范
+        \item 每个PHP文件包含注释头（作者、日期、描述）
+    \end{itemize}
+    
+    \item \textbf{文档要求}
+    \begin{itemize}
+        \item 关键功能添加代码注释
+        \item 数据库表和字段添加注释
+        \item 提供完整的开发文档
+    \end{itemize}
+    
+    \item \textbf{模块化设计}
+    \begin{itemize}
+        \item MVC架构清晰
+        \item 模块间低耦合
+        \item 代码复用性高
+    \end{itemize}
+\end{enumerate}
+
+\subsubsection{可扩展性需求}
+\begin{enumerate}
+    \item \textbf{功能扩展}
+    \begin{itemize}
+        \item 预留用户个人中心功能接口
+        \item 预留文章附件上传功能
+        \item 预留多语言支持
+    \end{itemize}
+    
+    \item \textbf{数据扩展}
+    \begin{itemize}
+        \item 数据库设计支持未来扩展
+        \item 表结构合理，减少后期修改
+    \end{itemize}
+\end{enumerate}
+
+\section{数据库需求}
+
+\subsection{数据实体分析}
+本系统涉及以下主要数据实体：
+
+\begin{enumerate}
+    \item \textbf{用户（User）}：存储系统用户信息
+    \item \textbf{文章（Article）}：存储历史资料文章
+    \item \textbf{分类（Category）}：存储文章分类信息
+    \item \textbf{评论（Comment）}：存储用户评论
+    \item \textbf{留言（GuestBook）}：存储访客留言
+    \item \textbf{标签（Tag）}：存储文章标签
+    \item \textbf{团队成员（TeamMember）}：存储团队成员信息
+    \item \textbf{统计数据（Stats）}：存储访问统计信息
+\end{enumerate}
+
+\subsection{数据表设计要求}
+根据课程要求，本项目数据库表数量需 \textbf{> 10张表}，当前设计共计 \textbf{19张表}，具体如下：
+
+\begin{table}[H]
+\centering
+\caption{数据库表列表}
+\begin{tabularx}{\textwidth}{|l|X|l|}
+\hline
+\textbf{序号} & \textbf{表名} & \textbf{说明} \\ \hline
+1 & pre\_sys\_user & 系统用户表 \\ \hline
+2 & pre\_news\_category & 文章分类表 \\ \hline
+3 & pre\_news\_article & 文章主表 \\ \hline
+4 & pre\_news\_comment & 文章评论表 \\ \hline
+5 & pre\_guestbook & 留言板表 \\ \hline
+6 & pre\_article\_tag & 文章标签表 \\ \hline
+7 & pre\_article\_tag\_relation & 文章标签关联表 \\ \hline
+8 & pre\_article\_view\_log & 文章浏览日志表 \\ \hline
+9 & pre\_article\_like & 文章点赞记录表 \\ \hline
+10 & pre\_article\_favorite & 文章收藏表 \\ \hline
+11 & pre\_article\_attachment & 文章附件表 \\ \hline
+12 & pre\_team\_department & 团队部门表 \\ \hline
+13 & pre\_team\_member & 团队成员表 \\ \hline
+14 & pre\_daily\_stats & 每日统计表 \\ \hline
+15 & pre\_category\_stats & 分类统计表 \\ \hline
+16 & pre\_link & 友情链接表 \\ \hline
+17 & pre\_tag & 标签表 \\ \hline
+18 & pre\_visit\_log & 访问日志表 \\ \hline
+19 & pre\_config & 系统配置表 \\ \hline
+\end{tabularx}
+\end{table}
+
+\subsection{核心数据表结构}
+
+\subsubsection{用户表（pre\_sys\_user）}
+\begin{table}[H]
+\centering
+\caption{用户表结构}
+\begin{tabularx}{\textwidth}{|l|l|l|X|}
+\hline
+\textbf{字段名} & \textbf{类型} & \textbf{约束} & \textbf{说明} \\ \hline
+uid & INT & PRIMARY KEY, AUTO\_INCREMENT & 用户ID \\ \hline
+username & VARCHAR(50) & NOT NULL, UNIQUE & 用户名 \\ \hline
+password\_hash & VARCHAR(255) & NOT NULL & 密码哈希 \\ \hline
+email & VARCHAR(100) & NULL & 邮箱 \\ \hline
+phone & VARCHAR(20) & NULL & 手机号 \\ \hline
+avatar & VARCHAR(255) & NULL & 头像 \\ \hline
+role & TINYINT & DEFAULT 0 & 角色：0普通用户 1管理员 \\ \hline
+status & TINYINT & DEFAULT 1 & 状态：0禁用 1正常 \\ \hline
+created\_at & DATETIME & DEFAULT CURRENT\_TIMESTAMP & 创建时间 \\ \hline
+updated\_at & DATETIME & DEFAULT CURRENT\_TIMESTAMP & 更新时间 \\ \hline
+\end{tabularx}
+\end{table}
+
+\subsubsection{文章分类表（pre\_news\_category）}
+\begin{table}[H]
+\centering
+\caption{文章分类表结构}
+\begin{tabularx}{\textwidth}{|l|l|l|X|}
+\hline
+\textbf{字段名} & \textbf{类型} & \textbf{约束} & \textbf{说明} \\ \hline
+cid & INT & PRIMARY KEY, AUTO\_INCREMENT & 分类ID \\ \hline
+name & VARCHAR(50) & NOT NULL, UNIQUE & 分类名称 \\ \hline
+description & TEXT & NULL & 分类描述 \\ \hline
+sort & INT & DEFAULT 0 & 排序 \\ \hline
+status & TINYINT & DEFAULT 1 & 状态：0禁用 1启用 \\ \hline
+created\_at & DATETIME & DEFAULT CURRENT\_TIMESTAMP & 创建时间 \\ \hline
+updated\_at & DATETIME & DEFAULT CURRENT\_TIMESTAMP & 更新时间 \\ \hline
+\end{tabularx}
+\end{table}
+
+\subsubsection{文章主表（pre\_news\_article）}
+\begin{table}[H]
+\centering
+\caption{文章主表结构}
+\begin{tabularx}{\textwidth}{|l|l|l|X|}
+\hline
+\textbf{字段名} & \textbf{类型} & \textbf{约束} & \textbf{说明} \\ \hline
+aid & INT & PRIMARY KEY, AUTO\_INCREMENT & 文章ID \\ \hline
+cid & INT & NOT NULL, FOREIGN KEY & 分类ID \\ \hline
+title & VARCHAR(200) & NOT NULL & 文章标题 \\ \hline
+summary & TEXT & NULL & 文章摘要 \\ \hline
+content & LONGTEXT & NOT NULL & 文章内容 \\ \hline
+author & VARCHAR(50) & NULL & 作者 \\ \hline
+source & VARCHAR(100) & NULL & 来源 \\ \hline
+views & INT & DEFAULT 0 & 浏览量 \\ \hline
+likes & INT & DEFAULT 0 & 点赞数 \\ \hline
+is\_top & TINYINT & DEFAULT 0 & 是否置顶 \\ \hline
+is\_hot & TINYINT & DEFAULT 0 & 是否热门 \\ \hline
+status & TINYINT & DEFAULT 1 & 状态：0草稿 1已发布 2已下架 \\ \hline
+created\_at & DATETIME & DEFAULT CURRENT\_TIMESTAMP & 创建时间 \\ \hline
+updated\_at & DATETIME & DEFAULT CURRENT\_TIMESTAMP & 更新时间 \\ \hline
+\end{tabularx}
+\end{table}
+
+\subsubsection{评论表（pre\_news\_comment）}
+\begin{table}[H]
+\centering
+\caption{评论表结构}
+\begin{tabularx}{\textwidth}{|l|l|l|X|}
+\hline
+\textbf{字段名} & \textbf{类型} & \textbf{约束} & \textbf{说明} \\ \hline
+comment\_id & INT & PRIMARY KEY, AUTO\_INCREMENT & 评论ID \\ \hline
+aid & INT & NOT NULL, FOREIGN KEY & 文章ID \\ \hline
+uid & INT & NOT NULL, FOREIGN KEY & 用户ID \\ \hline
+content & TEXT & NOT NULL & 评论内容 \\ \hline
+parent\_id & INT & NULL & 父评论ID（用于回复） \\ \hline
+status & TINYINT & DEFAULT 0 & 状态：0待审核 1已通过 2已拒绝 \\ \hline
+created\_at & DATETIME & DEFAULT CURRENT\_TIMESTAMP & 创建时间 \\ \hline
+updated\_at & DATETIME & DEFAULT CURRENT\_TIMESTAMP & 更新时间 \\ \hline
+\end{tabularx}
+\end{table}
+
+\subsection{数据字典要求}
+\begin{itemize}
+    \item 所有表名使用 \texttt{pre\_} 前缀
+    \item 主键统一命名为表名简写 + \texttt{id} 或特定ID名称
+    \item 时间字段统一使用 \texttt{created\_at}、\texttt{updated\_at}
+    \item 状态字段统一使用 \texttt{status}，TINYINT类型
+    \item 所有表和字段添加中文注释
+    \item 外键关联关系明确，保证数据完整性
+\end{itemize}
+
+\section{系统接口需求}
+
+\subsection{前后端交互接口}
+
+\subsubsection{文章接口}
+\begin{table}[H]
+\centering
+\caption{文章相关接口}
+\begin{tabularx}{\textwidth}{|l|l|X|}
+\hline
+\textbf{接口名称} & \textbf{请求方式} & \textbf{功能说明} \\ \hline
+/site/index & GET & 获取首页数据（热门文章、最新文章） \\ \hline
+/site/news & GET & 获取文章列表（支持分类、排序、分页） \\ \hline
+/site/view & GET & 获取文章详情（id参数） \\ \hline
+/site/like & POST & 文章点赞接口（id参数） \\ \hline
+\end{tabularx}
+\end{table}
+
+\subsubsection{评论接口}
+\begin{table}[H]
+\centering
+\caption{评论相关接口}
+\begin{tabularx}{\textwidth}{|l|l|X|}
+\hline
+\textbf{接口名称} & \textbf{请求方式} & \textbf{功能说明} \\ \hline
+/site/comment & POST & 提交评论（需登录） \\ \hline
+/comment/index & GET & 获取评论列表（后台） \\ \hline
+/comment/update & POST & 审核评论（后台） \\ \hline
+\end{tabularx}
+\end{table}
+
+\subsubsection{用户接口}
+\begin{table}[H]
+\centering
+\caption{用户相关接口}
+\begin{tabularx}{\textwidth}{|l|l|X|}
+\hline
+\textbf{接口名称} & \textbf{请求方式} & \textbf{功能说明} \\ \hline
+/site/signup & GET/POST & 用户注册 \\ \hline
+/site/login & GET/POST & 用户登录 \\ \hline
+/site/logout & POST & 用户注销 \\ \hline
+\end{tabularx}
+\end{table}
+
+\subsection{第三方接口}
+\begin{enumerate}
+    \item \textbf{图表库（ECharts）}
+    \begin{itemize}
+        \item CDN引入：https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js
+        \item 用于数据可视化展示
+    \end{itemize}
+    
+    \item \textbf{图标库（Font Awesome）}
+    \begin{itemize}
+        \item CDN引入：https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css
+        \item 用于界面图标显示
+    \end{itemize}
+\end{enumerate}
+
+\section{运行环境需求}
+
+\subsection{服务器环境}
+\begin{itemize}
+    \item \textbf{操作系统}：Windows 10/11 或 Linux (Ubuntu 20.04+)
+    \item \textbf{Web服务器}：Apache 2.4+
+    \item \textbf{PHP版本}：PHP 8.0+
+    \item \textbf{数据库}：MySQL 5.7+ 或 MariaDB 10.3+
+\end{itemize}
+
+\subsection{客户端环境}
+\begin{itemize}
+    \item \textbf{浏览器}：Chrome 90+、Firefox 88+、Edge 90+、Safari 14+
+    \item \textbf{屏幕分辨率}：最低 1280×720，推荐 1920×1080
+    \item \textbf{网络环境}：稳定的互联网连接
+\end{itemize}
+
+\subsection{开发环境}
+\begin{itemize}
+    \item \textbf{开发工具}：Visual Studio Code / PhpStorm
+    \item \textbf{版本控制}：Git 2.30+
+    \item \textbf{包管理器}：Composer 2.0+
+    \item \textbf{集成环境}：XAMPP 8.2.12（包含Apache + MySQL + PHP）
+\end{itemize}
+
+\section{项目约束与假设}
+
+\subsection{项目约束}
+\begin{enumerate}
+    \item \textbf{时间约束}
+    \begin{itemize}
+        \item 项目开发周期：2025年10月 - 2025年12月
+        \item 代码提交截止日期：2025年12月24日
+        \item 不可延期交付
+    \end{itemize}
+    
+    \item \textbf{技术约束}
+    \begin{itemize}
+        \item 必须使用Yii2框架开发
+        \item 必须使用MySQL数据库
+        \item 必须遵循MVC架构
+        \item 数据库表数量 > 10张
+    \end{itemize}
+    
+    \item \textbf{人力约束}
+    \begin{itemize}
+        \item 团队人数：4人
+        \item 每位成员至少编写MVC三层各一个文件
+        \item 需明确分工和工作量分配
+    \end{itemize}
+    
+    \item \textbf{文档约束}
+    \begin{itemize}
+        \item 需提供7个团队文档（需求、设计、实现、用户手册、部署、PPT、录屏）
+        \item 需提供3个个人作业文档
+        \item 所有文档格式和命名需符合规范
+    \end{itemize}
+\end{enumerate}
+
+\subsection{项目假设}
+\begin{enumerate}
+    \item 用户具备基本的计算机和互联网使用能力
+    \item 服务器环境配置正确，满足系统运行要求
+    \item 项目部署在局域网或公网环境，网络连接稳定
+    \item 历史资料内容真实可靠，来源合法
+    \item 用户注册时提供的信息真实有效
+\end{enumerate}
+
+\section{需求优先级}
+
+根据功能重要性和实现难度，将需求划分为三个优先级：
+
+\subsection{高优先级（必须实现）}
+\begin{enumerate}
+    \item 用户注册、登录、注销功能
+    \item 文章的增删改查（前后台）
+    \item 文章分类管理
+    \item 文章列表展示与筛选
+    \item 文章详情页展示
+    \item 后台管理系统基本框架
+    \item 数据库设计与实现（>10张表）
+\end{enumerate}
+
+\subsection{中优先级（重要功能）}
+\begin{enumerate}
+    \item 文章点赞功能
+    \item 评论系统（发表、审核、管理）
+    \item 留言板功能
+    \item 用户管理（后台）
+    \item 首页数据统计图表
+    \item 阅读进度条
+    \item 文章分享功能
+    \item 返回顶部功能
+\end{enumerate}
+
+\subsection{低优先级（优化功能）}
+\begin{enumerate}
+    \item 文章附件上传
+    \item 用户个人中心
+    \item 文章收藏功能
+    \item 高级搜索功能
+    \item 多语言支持
+    \item 邮件通知功能
+    \item 一键部署脚本
+\end{enumerate}
+
+\section{验收标准}
+
+\subsection{功能验收}
+\begin{enumerate}
+    \item 所有高优先级功能全部实现且运行正常
+    \item 中优先级功能至少实现80\%
+    \item 前后台界面完整，无明显布局错误
+    \item 数据库表数量达到要求（>10张）
+    \item 每位成员均编写了MVC三层文件
+\end{enumerate}
+
+\subsection{性能验收}
+\begin{enumerate}
+    \item 页面加载时间符合要求（<3秒）
+    \item 无明显的性能瓶颈
+    \item 支持多用户并发访问
+\end{enumerate}
+
+\subsection{安全验收}
+\begin{enumerate}
+    \item 通过SQL注入测试
+    \item 通过XSS攻击测试
+    \item 通过CSRF攻击测试
+    \item 密码加密存储
+    \item 权限控制有效
+\end{enumerate}
+
+\subsection{代码质量验收}
+\begin{enumerate}
+    \item 代码符合PSR规范
+    \item 关键代码添加注释
+    \item 数据库表和字段有注释
+    \item MVC架构清晰
+    \item 无严重的代码冗余
+\end{enumerate}
+
+\subsection{文档验收}
+\begin{enumerate}
+    \item 7个团队文档齐全（需求、设计、实现、用户手册、部署、PPT、录屏）
+    \item 3个个人作业文档齐全
+    \item 文档格式规范，命名正确
+    \item 文档内容完整、清晰
+\end{enumerate}
+
+\section{风险分析}
+
+\subsection{技术风险}
+\begin{table}[H]
+\centering
+\caption{技术风险分析}
+\begin{tabularx}{\textwidth}{|l|X|X|l|}
+\hline
+\textbf{风险} & \textbf{影响} & \textbf{应对措施} & \textbf{优先级} \\ \hline
+Yii2框架不熟悉 & 开发进度延迟 & 提前学习官方文档，参考示例项目 & 高 \\ \hline
+数据库设计不合理 & 后期修改困难 & 前期充分讨论，绘制ER图 & 高 \\ \hline
+前后端集成问题 & 功能无法正常使用 & 定义清晰的接口规范 & 中 \\ \hline
+浏览器兼容性 & 部分用户无法访问 & 使用标准Web技术，多浏览器测试 & 中 \\ \hline
+\end{tabularx}
+\end{table}
+
+\subsection{项目管理风险}
+\begin{table}[H]
+\centering
+\caption{项目管理风险分析}
+\begin{tabularx}{\textwidth}{|l|X|X|l|}
+\hline
+\textbf{风险} & \textbf{影响} & \textbf{应对措施} & \textbf{优先级} \\ \hline
+任务分工不明确 & 重复工作或遗漏 & 明确分工，定期同步进度 & 高 \\ \hline
+成员沟通不畅 & 开发进度受阻 & 建立微信群，使用Git协作 & 高 \\ \hline
+时间管理不当 & 无法按时交付 & 制定详细计划，设置里程碑 & 高 \\ \hline
+代码冲突频繁 & 影响开发效率 & 遵循Git工作流，及时解决冲突 & 中 \\ \hline
+\end{tabularx}
+\end{table}
+
+\subsection{需求变更风险}
+\begin{table}[H]
+\centering
+\caption{需求变更风险分析}
+\begin{tabularx}{\textwidth}{|l|X|X|l|}
+\hline
+\textbf{风险} & \textbf{影响} & \textbf{应对措施} & \textbf{优先级} \\ \hline
+需求理解偏差 & 返工重做 & 与老师确认需求细节 & 高 \\ \hline
+需求频繁变更 & 无法按时完成 & 冻结核心需求，变更需评估 & 中 \\ \hline
+功能扩展过多 & 超出能力范围 & 按优先级实现，保证核心功能 & 中 \\ \hline
+\end{tabularx}
+\end{table}
+
+\section{项目团队与分工}
+
+\subsection{团队成员}
+\begin{table}[H]
+\centering
+\caption{团队成员信息}
+\begin{tabularx}{\textwidth}{|l|l|l|X|}
+\hline
+\textbf{姓名} & \textbf{学号} & \textbf{角色} & \textbf{负责模块} \\ \hline
+童汉鑫 & 2311995 & 组长 & 评论管理、团队展示、成员管理、部署文档 \\ \hline
+刘浩泽 & 2212478 & 组员 & 首页、文章管理、分类管理、爬虫、需求文档、设计文档 \\ \hline
+彭浩然 & 2313314 & 组员 & 登录注册、留言、实现文档、用户手册 \\ \hline
+董珺 & 2212880 & 组员 & 留言板、团队展示 \\ \hline
+\end{tabularx}
+\end{table}
+
+\textbf{GitHub 仓库}：\url{https://github.com/lhz191/InternetDatabaseDevelopment2025}
+
+\subsection{详细分工}
+\begin{table}[H]
+\centering
+\caption{模块分工详情}
+\begin{tabularx}{\textwidth}{|l|X|l|}
+\hline
+\textbf{成员} & \textbf{负责内容} & \textbf{工作量占比} \\ \hline
+童汉鑫 & 
+\begin{itemize}
+    \item 前台评论功能
+    \item 后台评论审核与管理
+    \item 文章详情页优化
+    \item 团队展示页面优化
+    \item 部署文档编写
+\end{itemize} & 20\% \\ \hline
+刘浩泽 & 
+\begin{itemize}
+    \item 前台首页设计与实现
+    \item 后台文章管理（CRUD）
+    \item 后台分类管理（CRUD）
+    \item 文章筛选、排序功能
+    \item Python爬虫开发（生成500+文章）
+    \item 动态图表开发（ECharts）
+    \item 数据库表设计（19张表）
+    \item 需求文档编写
+    \item 设计文档编写
+\end{itemize} & 35\% \\ \hline
+彭浩然 & 
+\begin{itemize}
+    \item 用户注册、登录、注销功能
+    \item 后台用户管理（CRUD）
+    \item 权限控制
+    \item 前台留言功能
+    \item 实现文档编写
+    \item 用户手册编写
+\end{itemize} & 25\% \\ \hline
+董珺 & 
+\begin{itemize}
+    \item 前台留言板功能
+    \item 后台留言管理
+    \item 前台团队展示页面
+    \item 后台团队成员管理
+\end{itemize} & 20\% \\ \hline
+\end{tabularx}
+\end{table}
+
+\subsection{开发计划}
+\begin{table}[H]
+\centering
+\caption{项目开发时间表}
+\begin{tabularx}{\textwidth}{|l|X|l|}
+\hline
+\textbf{阶段} & \textbf{主要任务} & \textbf{时间} \\ \hline
+需求分析 & 需求调研、需求文档编写 & 第1-2周 \\ \hline
+系统设计 & 数据库设计、接口设计、设计文档编写 & 第3-4周 \\ \hline
+开发实现 & 前后端功能开发、单元测试 & 第5-10周 \\ \hline
+集成测试 & 功能集成、系统测试、Bug修复 & 第11周 \\ \hline
+文档编写 & 用户手册、部署文档、PPT制作 & 第12周 \\ \hline
+项目提交 & 录屏讲解、代码整理、最终提交 & 第12周末 \\ \hline
+\end{tabularx}
+\end{table}
+
+\section{总结}
+
+本需求文档详细描述了"抗战胜利80周年纪念网站"项目的各项需求，包括：
+
+\begin{enumerate}
+    \item \textbf{功能需求}：涵盖前台展示、后台管理、用户认证等核心功能
+    \item \textbf{非功能需求}：明确了性能、安全、可用性、可维护性等质量要求
+    \item \textbf{数据库需求}：设计了19张表，满足课程要求（>10张表）
+    \item \textbf{接口需求}：定义了前后端交互接口和第三方接口
+    \item \textbf{运行环境需求}：明确了服务器、客户端、开发环境要求
+    \item \textbf{项目约束与假设}：列出了项目限制条件和前提假设
+    \item \textbf{需求优先级}：划分了高、中、低三个优先级
+    \item \textbf{验收标准}：明确了功能、性能、安全、代码质量、文档等验收标准
+    \item \textbf{风险分析}：识别了技术、管理、需求变更等风险及应对措施
+    \item \textbf{项目团队与分工}：明确了成员分工和开发计划
+\end{enumerate}
+
+本项目将严格按照需求文档执行，确保按时交付高质量的系统，并提供完整的技术文档。通过本项目，团队成员将深入学习Yii2框架、MySQL数据库、Web前端技术等知识，提升实际开发能力和团队协作能力。
+
+%--------------------------结束--------------------------------
+\end{document}
+
