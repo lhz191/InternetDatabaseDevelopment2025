@@ -68,3 +68,4 @@ INSERT IGNORE INTO `pre_team_member` (`id`, `department_id`, `name`, `position`,
 (3, 1, '组员C', '开发', '负责分类管理模块', 3, 1),
 (4, 1, '组员D', '开发', '负责评论管理模块', 4, 1);
 
+

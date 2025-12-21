@@ -335,49 +335,41 @@ class SiteController extends Controller
  * 处理 AJAX 评论提交
  */
 public function actionComment()
-{
-    // 1. 设置返回格式为 JSON
-    Yii::$app->response->format = Response::FORMAT_JSON;
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $request = Yii::$app->request;
+        
+        $articleId = $request->post('article_id');
+        $content = $request->post('content');
+        $parentId = $request->post('parent_id'); // <--- 新增：接收父评论ID
 
-    // 2. 接收 POST 数据
-    $request = Yii::$app->request;
-    $articleId = $request->post('article_id');
-    $content = $request->post('content');
+        if (!$articleId || !$content) {
+            return ['success' => false, 'message' => '参数缺失'];
+        }
 
-    // 简单校验
-    if (!$articleId || !$content) {
-        return ['success' => false, 'message' => '参数缺失'];
+        $model = new PreNewsComment(); 
+        $model->aid = $articleId;
+        $model->content = $content;
+        
+        // <--- 新增：如果有 parent_id 就存进去，否则为 null
+        $model->parent_id = !empty($parentId) ? $parentId : null; 
+
+        // 处理用户ID
+        if (Yii::$app->user->isGuest) {
+            $model->uid = 1; // 游客/默认ID
+        } else {
+            $model->uid = Yii::$app->user->id;
+        }
+
+        if ($model->save()) {
+            return ['success' => true, 'message' => '评论成功'];
+        } else {
+            return [
+                'success' => false, 
+                'message' => '保存失败：' . implode(', ', $model->getFirstErrors())
+            ];
+        }
     }
-
-    // ==========================================
-    // 3. 关键步骤：先创建对象 (实例化)
-    // ==========================================
-    $model = new PreNewsComment(); 
-
-    // 4. 然后才能赋值
-    $model->aid = $articleId;
-    $model->content = $content;
-
-    // 处理游客/登录用户
-    if (Yii::$app->user->isGuest) {
-        // 如果是游客，指定一个默认的用户ID 
-        // 警告：确保你的 user 表里有 id=1 的用户，否则外键约束会报错！
-        $model->uid = 1; 
-    } else {
-        // 如果已登录，使用当前用户ID
-        $model->uid = Yii::$app->user->isGuest ? 1 : Yii::$app->user->id;
-    }
-
-    // 5. 保存并返回结果
-    if ($model->save()) {
-        return ['success' => true, 'message' => '评论成功'];
-    } else {
-        return [
-            'success' => false, 
-            'message' => '保存失败：' . implode(', ', $model->getFirstErrors())
-        ];
-    }
-}
 
     /**
      * 提交评论动作 (新增)
@@ -467,5 +459,30 @@ public function actionComment()
         Yii::$app->session->set('liked_articles', $likedArticles);
         
         return ['success' => true, 'message' => '点赞成功', 'likes' => $article->likes];
+    }
+    public function actionLikeComment($id)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        
+        // 查找评论
+        $comment = PreNewsComment::findOne($id);
+        if (!$comment) {
+            return ['success' => false, 'message' => '评论不存在'];
+        }
+
+        // 检查 Session 防止重复点赞
+        $likedComments = Yii::$app->session->get('liked_comments', []);
+        if (in_array($id, $likedComments)) {
+            return ['success' => false, 'message' => '已点赞', 'likes' => $comment->likes];
+        }
+
+        // 更新数据库：点赞数 +1
+        $comment->updateCounters(['likes' => 1]);
+        
+        // 记录到 Session
+        $likedComments[] = $id;
+        Yii::$app->session->set('liked_comments', $likedComments);
+
+        return ['success' => true, 'likes' => $comment->likes];
     }
 }

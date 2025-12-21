@@ -26,17 +26,11 @@ $this->params['breadcrumbs'][] = $this->title;
             'uid',
             'username',
             'email:email',
-            'phone',
-            [
-                'attribute' => 'role',
-                'value' => function($model) {
-                    return $model->getRoleText();
-                },
-            ],
+            //'phone',
             [
                 'attribute' => 'status',
                 'value' => function($model) {
-                    return $model->getStatusText();
+                    return $model->status == 1 ? '正常' : '禁用';
                 },
             ],
             'created_at',
@@ -51,4 +45,5 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); ?>
 
 </div>
+
 

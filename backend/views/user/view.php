@@ -33,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'uid',
             'username',
             'email:email',
-            'phone',
+            //'phone',
             [
                 'attribute' => 'role',
                 'value' => $model->getRoleText(),
@@ -48,4 +48,5 @@ $this->params['breadcrumbs'][] = $this->title;
     ]) ?>
 
 </div>
+
 

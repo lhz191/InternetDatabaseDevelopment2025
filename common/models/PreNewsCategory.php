@@ -113,3 +113,4 @@ class PreNewsCategory extends ActiveRecord
     }
 }
 
+
