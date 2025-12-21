@@ -23,7 +23,7 @@ class SignupForm extends Model
             ['username', 'trim'],
             ['username', 'required', 'message' => '用户名不能为空'],
             ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => '用户名已存在，请重新命名'],
-            ['username', 'string', 'min' => 2, 'max' => 255],
+            ['username', 'string', 'min' => 2, 'max' => 50],
 
             ['password', 'required', 'message' => '密码不能为空'],
             ['password', 'string', 'min' => 6, 'message' => '密码至少包含6个字符'],
