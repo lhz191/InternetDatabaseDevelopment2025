@@ -33,7 +33,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function tableName()
     {
-        return '{{%sys_user}}';
+        return 'pre_sys_user';
     }
 
     /**
