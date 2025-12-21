@@ -220,7 +220,7 @@ $this->title = '核心团队';
                                         <a href="mailto:<?= $member->email ?>" class="social-btn" title="Email">
                                             <i class="fas fa-envelope"></i>
                                         </a>
-                                        <a href="#" class="social-btn" title="Profile">
+                                        <a href="<?= \yii\helpers\Url::to(['team/view', 'id' => $member->id]) ?>" class="social-btn" title="Profile">
                                             <i class="fas fa-user"></i>
                                         </a>
                                     </div>

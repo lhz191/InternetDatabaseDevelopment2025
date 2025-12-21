@@ -35,6 +35,7 @@ class TeamMember extends \yii\db\ActiveRecord
         return [
             [['dept_id', 'name'], 'required'],
             [['dept_id', 'status'], 'integer'],
+            [['bio', 'responsibilities'], 'string'],
             [['bio'], 'string'],
             [['created_at'], 'safe'],
             [['name'], 'string', 'max' => 50],
@@ -55,9 +56,16 @@ class TeamMember extends \yii\db\ActiveRecord
             'position' => '职位',
             'avatar' => '照片路径',
             'bio' => '个人简介',
+            'responsibilities' => '工作职责',
             'email' => 'Email',
             'status' => '1在职 0离职',
             'created_at' => 'Created At',
         ];
+    }
+    public function getDepartment()
+    {
+        // 假设部门模型类名是 TeamDepartment，且主键是 id
+        // 如果你的部门模型叫 PreTeamDepartment，请修改类名
+        return $this->hasOne(TeamDepartment::class, ['id' => 'dept_id']);
     }
 }

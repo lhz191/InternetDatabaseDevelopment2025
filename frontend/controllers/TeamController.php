@@ -3,25 +3,45 @@ namespace frontend\controllers;
 
 use Yii;
 use yii\web\Controller;
-// 注意：如果你没有重命名模型，Gii生成的默认类名可能是 PreTeamDepartment
-// 请检查 common/models/ 下的文件名。如果是 PreTeamDepartment.php，请使用下面的 use 语句：
-use common\models\TeamDepartment; 
-use common\models\TeamMember;
-// 如果你已经重命名为 TeamDepartment，则使用：use common\models\TeamDepartment;
+use yii\web\NotFoundHttpException; // 1. 必须引入这个，否则 actionView 会报错
+use common\models\TeamDepartment;  // 2. 确保你的 common/models 下有 TeamDepartment.php
+use common\models\TeamMember;      // 3. 引用队员模型
 
 class TeamController extends Controller
 {
+    /**
+     * 团队列表页
+     */
     public function actionIndex()
     {
         // 获取所有部门及其成员
-        // 这里的 PreTeamDepartment 类名要和你上方 use 的一致
+        // 注意：Gii 生成的关联方法通常叫 getPreTeamMembers，所以这里用 'preTeamMembers'
+        // 如果你的模型里改成了 getTeamMembers()，请把下面换成 'teamMembers'
         $departments = TeamDepartment::find()
-            ->with('teamMembers') // 这里关联方法名通常是 'preTeamMembers' (取决于Gii生成), 请检查 Model 文件
-            ->orderBy('sort_order')
+            ->with('teamMembers') 
+            ->orderBy(['sort_order' => SORT_ASC]) // 按 sort_order 升序排列
             ->all();
 
         return $this->render('index', [
             'departments' => $departments,
+        ]);
+    }
+
+    /**
+     * 成员详情页 (点击头像跳转)
+     * @param int $id
+     */
+    public function actionView($id)
+    {
+        // 使用 TeamMember 模型查找
+        $model = TeamMember::findOne($id);
+
+        if ($model === null) {
+            throw new NotFoundHttpException('请求的成员不存在。');
+        }
+
+        return $this->render('view', [
+            'model' => $model,
         ]);
     }
 }
