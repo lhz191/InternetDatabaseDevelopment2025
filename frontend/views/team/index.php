@@ -6,23 +6,26 @@ $this->title = '核心团队';
 ?>
 
 <style>
-    /* 团队页面的 Hero Banner */
+    /* 团队页面的 Hero Banner - 抗战纪念风格 */
     .team-hero {
-        height: 350px;
-        background: url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1400') center/cover;
+        height: 400px; /*稍微加高一点，显得更庄重 */
+        /* 背景图换成更有历史感的图片（这里使用的是一张长城/山河的图片） */
+        background: url('https://images.unsplash.com/photo-1508804185872-d7badad00f7d?w=1400') center/cover;
         position: relative;
         display: flex;
         align-items: center;
         justify-content: center;
-        margin-top: -20px; /* 抵消掉默认的容器边距，视情况调整 */
+        margin-top: -20px;
         margin-bottom: 40px;
+        border-bottom: 5px solid #8B0000; /* 底部增加红色边框 */
     }
     
     .team-hero::before {
         content: '';
         position: absolute;
         top: 0; left: 0; right: 0; bottom: 0;
-        background: linear-gradient(135deg, rgba(26, 26, 26, 0.8), rgba(231, 76, 60, 0.2));
+        /* 遮罩层改为深红到黑色的渐变，营造肃穆氛围 */
+        background: linear-gradient(135deg, rgba(60, 0, 0, 0.85), rgba(139, 0, 0, 0.6));
     }
     
     .team-hero-content {
@@ -30,20 +33,30 @@ $this->title = '核心团队';
         z-index: 1;
         text-align: center;
         color: white;
+        padding: 0 20px;
     }
     
     .team-hero h1 {
-        font-size: 42px;
+        /* 使用衬线字体，更有历史感 */
+        font-family: 'Noto Serif SC', serif; 
+        font-size: 48px;
         font-weight: 700;
-        margin-bottom: 12px;
-        text-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        margin-bottom: 16px;
+        color: #FFD700; /* 金色文字 */
+        text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        letter-spacing: 4px;
     }
     
     .team-hero p {
-        font-size: 18px;
-        opacity: 0.9;
-        max-width: 600px;
+        font-family: 'Noto Serif SC', serif;
+        font-size: 20px;
+        opacity: 0.95;
+        max-width: 700px;
         margin: 0 auto;
+        line-height: 1.8;
+        font-weight: 300;
+        border-top: 1px solid rgba(255, 215, 0, 0.3); /* 顶部细金线 */
+        padding-top: 15px;
     }
 
     /* 部门标题 */
@@ -183,8 +196,12 @@ $this->title = '核心团队';
     
     <div class="team-hero">
         <div class="team-hero-content">
-            <h1>Our Awesome Team</h1>
-            <p>汇聚创意与技术的精英团队，致力于打造最优质的新闻资讯平台</p>
+            <h1>铭记历史 · 薪火相传</h1>
+            
+            <p>
+                纪念中国人民抗日战争暨世界反法西斯战争胜利80周年<br>
+                项目核心创作团队
+            </p>
         </div>
     </div>
 
