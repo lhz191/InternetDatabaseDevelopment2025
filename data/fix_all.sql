@@ -63,9 +63,9 @@ INSERT IGNORE INTO `pre_team_department` (`id`, `name`, `description`, `sort_ord
 
 -- 插入示例团队成员数据
 INSERT IGNORE INTO `pre_team_member` (`id`, `department_id`, `name`, `position`, `description`, `sort_order`, `status`) VALUES
-(1, 1, '组员A', '组长', '负责用户管理模块', 1, 1),
+(1, 1, '彭浩然', '开发', '负责用户管理模块', 1, 1),
 (2, 1, '刘浩泽', '开发', '负责首页和文章管理', 2, 1),
-(3, 1, '组员C', '开发', '负责分类管理模块', 3, 1),
-(4, 1, '组员D', '开发', '负责评论管理模块', 4, 1);
+(3, 1, '董珺', '开发', '负责分类管理模块', 3, 1),
+(4, 1, '童汉鑫', '组长', '负责评论管理模块', 4, 1);
 
 
