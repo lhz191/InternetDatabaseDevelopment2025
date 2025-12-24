@@ -241,10 +241,10 @@ $this->title = '关于我们';
             <h2><i class="fas fa-users"></i> 团队成员</h2>
             <div class="team-grid">
                 <div class="team-member">
-                    <div class="member-avatar">A</div>
-                    <div class="member-name">组员A</div>
-                    <div class="member-role">组长 · 用户管理</div>
-                    <div class="member-id">学号: XXXXXXX</div>
+                    <div class="member-avatar" style="background: linear-gradient(135deg, #8B0000 0%, #B8860B 100%);">彭</div>
+                    <div class="member-name">彭浩然</div>
+                    <div class="member-role">用户管理</div>
+                    <div class="member-id">学号: 2313314</div>
                 </div>
                 <div class="team-member">
                     <div class="member-avatar" style="background: linear-gradient(135deg, #8B0000 0%, #B8860B 100%);">刘</div>
@@ -253,16 +253,16 @@ $this->title = '关于我们';
                     <div class="member-id">学号: 2212478</div>
                 </div>
                 <div class="team-member">
-                    <div class="member-avatar">C</div>
-                    <div class="member-name">组员C</div>
+                    <div class="member-avatar" style="background: linear-gradient(135deg, #8B0000 0%, #B8860B 100%);">董</div>
+                    <div class="member-name">董珺</div>
                     <div class="member-role">分类管理</div>
-                    <div class="member-id">学号: XXXXXXX</div>
+                    <div class="member-id">学号: 2212880</div>
                 </div>
                 <div class="team-member">
-                    <div class="member-avatar">D</div>
-                    <div class="member-name">组员D</div>
-                    <div class="member-role">评论管理</div>
-                    <div class="member-id">学号: XXXXXXX</div>
+                    <div class="member-avatar" style="background: linear-gradient(135deg, #8B0000 0%, #B8860B 100%);">童</div>
+                    <div class="member-name">童汉鑫</div>
+                    <div class="member-role">组长·评论管理</div>
+                    <div class="member-id">学号: 2311995</div>
                 </div>
             </div>
         </div>
