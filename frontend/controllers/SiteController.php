@@ -485,4 +485,62 @@ public function actionComment()
 
         return ['success' => true, 'likes' => $comment->likes];
     }
+    /**
+     * 作业下载页面
+     */
+    public function actionAssignments()
+    {
+        $teamPath = Yii::getAlias('@app/../data/team');
+        $personalPath = Yii::getAlias('@app/../data/personal');
+        
+        $teamFiles = [];
+        if (is_dir($teamPath)) {
+            $files = scandir($teamPath);
+            foreach ($files as $file) {
+                if ($file != '.' && $file != '..') {
+                    $teamFiles[] = $file;
+                }
+            }
+        }
+        
+        $personalFiles = [];
+        if (is_dir($personalPath)) {
+            $files = scandir($personalPath);
+            foreach ($files as $file) {
+                if ($file != '.' && $file != '..') {
+                    $personalFiles[] = $file;
+                }
+            }
+        }
+        
+        return $this->render('assignments', [
+            'teamFiles' => $teamFiles,
+            'personalFiles' => $personalFiles,
+        ]);
+    }
+
+    /**
+     * 文件下载
+     */
+    public function actionDownload($type, $file)
+    {
+        // 安全检查：防止目录遍历
+        if (strpos($file, '/') !== false || strpos($file, '\\') !== false || strpos($file, '..') !== false) {
+            throw new \yii\web\BadRequestHttpException('非法的文件名');
+        }
+        
+        if ($type === 'team') {
+            $path = Yii::getAlias('@app/../data/team/') . $file;
+        } elseif ($type === 'personal') {
+            $path = Yii::getAlias('@app/../data/personal/') . $file;
+        } else {
+            throw new \yii\web\BadRequestHttpException('错误的下载类型');
+        }
+        
+        if (file_exists($path)) {
+            return Yii::$app->response->sendFile($path);
+        } else {
+            throw new \yii\web\NotFoundHttpException('文件不存在');
+        }
+    }
 }
